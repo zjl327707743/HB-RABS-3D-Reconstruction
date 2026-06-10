@@ -1,0 +1,31 @@
+export const SCENE_SCALE = {
+  chamberWidth: 10,
+  chamberHeight: 6,
+  chamberDepth: 5,
+  tableHeight: 0,
+  tableThickness: 0.28,
+  tableDepth: 4.45,
+  tableWidth: 9.35,
+  rearWallZ: -2.2,
+  frontGlassZ: 2.2,
+  centerX: 0,
+  frameThickness: 0.14,
+  sideWallX: 4.9,
+  topY: 5.6,
+  bottomY: -0.18,
+  glovePortCount: 4,
+  glovePortRadius: 0.55,
+  glovePortY: 1.08,
+  glovePortZOffset: 0.06,
+  glovePortXs: [-3.3, -1.1, 1.1, 3.3],
+  glovePortSleeveDepth: 0.3,
+  centerEquipmentX: 0,
+  centerEquipmentZ: -0.85,
+  centerVesselY: 1.25,
+  funnelPairY: 3.75,
+  valvePipeZ: -0.35,
+  rightEquipmentX: 2.85,
+  rightEquipmentZ: -0.45
+};
+
+export const VERSION_LABEL = "v0.5 final visual draft";

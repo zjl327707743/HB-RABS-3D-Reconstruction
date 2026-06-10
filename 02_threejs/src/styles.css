@@ -1,0 +1,109 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow: hidden;
+  background: #f4f6f8;
+  color: #172033;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+canvas {
+  display: block;
+}
+
+.control-panel {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  width: min(360px, calc(100vw - 28px));
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(132, 144, 164, 0.48);
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgba(28, 35, 48, 0.14);
+  backdrop-filter: blur(10px);
+}
+
+.control-panel h1 {
+  margin: 0 0 10px;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
+button {
+  min-height: 32px;
+  border: 1px solid #bcc5d1;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #172033;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+button.active {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.toggle-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px 10px;
+  margin-top: 12px;
+  font-size: 12px;
+}
+
+.toggle-list label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.toggle-list input {
+  margin: 0;
+}
+
+.current-camera {
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid #d7dde6;
+  color: #4a5568;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.registry-panel {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  display: grid;
+  gap: 3px;
+  padding: 10px 12px;
+  background: rgba(23, 32, 51, 0.82);
+  color: #f7fafc;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.registry-panel span {
+  color: #cbd5e1;
+}

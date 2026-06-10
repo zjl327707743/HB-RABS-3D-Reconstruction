@@ -1,0 +1,20 @@
+.DS_Store
+
+# Source media and generated reference pools
+00_source_videos/
+01_reference_frames/overview/
+
+# Generated outputs
+04_outputs/contact_sheets/
+04_outputs/reference_gallery/
+04_outputs/review_boards/
+04_outputs/screenshots/
+
+# Three.js local dependencies and build artifacts
+02_threejs/node_modules/
+02_threejs/dist/
+02_threejs/.vite/
+
+# Logs and temporary files
+*.log
+*.tmp
