@@ -43,10 +43,10 @@ function createLowerHardPipe(side, materials) {
   const pipeX = sign * 0.58;
   const vesselRadius = s.centerVesselAvoidRadius;
   const clearance = s.centerVesselPipeClearance;
-  const turnX = sign * (vesselRadius + clearance - 0.08);
+  const turnX = sign * (vesselRadius + clearance + 0.05);
   const valveInnerX = sign * 1.48;
   const neckBottomY = 3.12;
-  const dropY = 2.48;
+  const dropY = 2.74;
   const valveCenterY = s.valvePipeY;
   const neckZ = s.centerEquipmentZ;
   const valveCenterZ = s.valvePipeZ;
@@ -55,14 +55,15 @@ function createLowerHardPipe(side, materials) {
   const anchors = {
     start: new THREE.Vector3(pipeX, neckBottomY, neckZ),
     drop: new THREE.Vector3(pipeX, dropY, neckZ),
-    elbowControl: new THREE.Vector3(pipeX, valveCenterY, valveCenterZ),
+    elbowControlA: new THREE.Vector3(pipeX, dropY - 0.22, neckZ),
+    elbowControlB: new THREE.Vector3(turnX - sign * 0.2, valveCenterY, valveCenterZ),
     horizontalStart: new THREE.Vector3(turnX, valveCenterY, valveCenterZ),
     end: new THREE.Vector3(valveInnerX, valveCenterY, valveCenterZ)
   };
 
   const path = new THREE.CurvePath();
   path.add(new THREE.LineCurve3(anchors.start, anchors.drop));
-  path.add(new THREE.QuadraticBezierCurve3(anchors.drop, anchors.elbowControl, anchors.horizontalStart));
+  path.add(new THREE.CubicBezierCurve3(anchors.drop, anchors.elbowControlA, anchors.elbowControlB, anchors.horizontalStart));
   path.add(new THREE.LineCurve3(anchors.horizontalStart, anchors.end));
 
   const mesh = new THREE.Mesh(

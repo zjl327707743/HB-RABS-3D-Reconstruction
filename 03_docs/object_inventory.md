@@ -83,8 +83,8 @@
 | ID | 名称 | 区域 | 描述 | 状态 | 优先级 |
 |----|------|------|------|------|--------|
 | `main_tubing_blockout` | 主要管路占位 | 管路 | 现在包含左右两根漏斗下方不锈钢硬弯管 | draft_v0.5.x | P2 |
-| `funnel_lower_hard_pipe_left` | 左漏斗下方硬管 | 管路 | 连续一体 TubeGeometry：短竖直段、紧凑 90° 左拐、短水平段接入左阀门 | draft_v0.5.x | P2 |
-| `funnel_lower_hard_pipe_right` | 右漏斗下方硬管 | 管路 | 连续一体 TubeGeometry：短竖直段、紧凑 90° 右拐、短水平段接入右阀门 | draft_v0.5.x | P2 |
+| `funnel_lower_hard_pipe_left` | 左漏斗下方硬管 | 管路 | 连续一体 TubeGeometry：缩短竖直段、小半径圆滑 90° 左拐、短水平段接入左阀门 | draft_v0.5.x | P2 |
+| `funnel_lower_hard_pipe_right` | 右漏斗下方硬管 | 管路 | 连续一体 TubeGeometry：缩短竖直段、小半径圆滑 90° 右拐、短水平段接入右阀门 | draft_v0.5.x | P2 |
 | `left_white_hose_blockout` | 左侧白色软管 | 管路 | 左阀门外侧延伸白管已删除/停用，不再显示 | deprecated_no_display | P2 |
 | `right_white_hose_blockout` | 右侧白色软管 | 管路 | 右阀门外侧延伸白管已删除/停用，不再显示 | deprecated_no_display | P2 |
 | `tubing_system` | 管路系统 | 管路 | 各类管路、管道 | planned | P2 |

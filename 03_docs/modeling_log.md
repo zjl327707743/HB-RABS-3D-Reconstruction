@@ -424,6 +424,12 @@
 - `funnel_lower_hard_pipe_left/right` 改为短竖直段、紧凑 90° 左右拐弯、短水平段接入阀门内侧。
 - 顶部粗管、后壁、手套孔、小件、升降门和 `right_vessel` 状态未改。
 
+### [2026-06-11] v0.5.x — 漏斗下硬管最终微调
+
+- 缩短 `funnel_lower_hard_pipe_left/right` 竖直段，弯头上移并改为小半径圆滑 90° 不锈钢硬弯。
+- 缩短接阀门的水平段，保持连续 TubeGeometry 和阀门高度不变。
+- 顶部粗管、后壁、手套孔、小件、升降门和 `right_vessel` 状态未改。
+
 ---
 
 ## 最后更新

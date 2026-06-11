@@ -244,7 +244,7 @@ export const objectRegistry = [
       "01_reference_frames/B_center_equipment/B_center_02_airflow_4_3_interval_0016.jpg",
       "01_reference_frames/D_rear_wall_top/D_rear_top_02_airflow_4_3_interval_0019.jpg"
     ],
-    notes: "Now contains two stainless lower hard pipes with compact vertical drop, 90-degree side turn, and short horizontal connection to the raised black valve lines."
+    notes: "Now contains two stainless lower hard pipes with shortened vertical drops, small-radius 90-degree bends, and short horizontal connections to the raised black valve lines."
   },
   {
     id: "funnel_lower_hard_pipe_left",
@@ -255,7 +255,7 @@ export const objectRegistry = [
     referenceImages: [
       "01_reference_frames/B_center_equipment/B_center_02_airflow_4_3_interval_0016.jpg"
     ],
-    notes: "Single continuous stainless TubeGeometry pipe from the left funnel neck: short vertical drop, compact left 90-degree bend, then short horizontal connection to the left black valve inner side."
+    notes: "Single continuous stainless TubeGeometry pipe from the left funnel neck: shortened vertical drop, small-radius smooth left 90-degree bend, then short horizontal connection to the left black valve inner side."
   },
   {
     id: "funnel_lower_hard_pipe_right",
@@ -266,7 +266,7 @@ export const objectRegistry = [
     referenceImages: [
       "01_reference_frames/B_center_equipment/B_center_02_airflow_4_3_interval_0016.jpg"
     ],
-    notes: "Single continuous stainless TubeGeometry pipe from the right funnel neck: short vertical drop, compact right 90-degree bend, then short horizontal connection to the right black valve inner side."
+    notes: "Single continuous stainless TubeGeometry pipe from the right funnel neck: shortened vertical drop, small-radius smooth right 90-degree bend, then short horizontal connection to the right black valve inner side."
   },
   {
     id: "rear_ports_blockout",
