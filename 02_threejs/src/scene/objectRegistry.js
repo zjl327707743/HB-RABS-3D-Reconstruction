@@ -88,7 +88,45 @@ export const objectRegistry = [
       "01_reference_frames/A_overall/A_overall_01_airflow_4_1_frame_000001.jpg",
       "01_reference_frames/B_center_equipment/B_center_06_airflow_4_1_frame_000004.jpg"
     ],
-    notes: "Two adjacent upper stainless funnel blockouts with thicker rims, short necks, and rough clamp rings."
+    notes: "Two adjacent upper stainless funnel blockouts with thicker rims, short necks, and rough clamp rings; lower pipes now match stainless hard-pipe visual logic."
+  },
+  {
+    id: "upper_inlet_pipe_pair",
+    displayName: "upper inlet pipe pair",
+    category: "main_equipment_blockout",
+    version: "v0.5.x",
+    status: "draft_v0.5.x",
+    childObjects: [
+      "upper_inlet_pipe_left",
+      "upper_inlet_pipe_right"
+    ],
+    referenceImages: [
+      "01_reference_frames/A_overall/A_overall_01_airflow_4_1_frame_000001.jpg",
+      "01_reference_frames/B_center_equipment/B_center_06_airflow_4_1_frame_000004.jpg"
+    ],
+    notes: "Two independent extra-thick stainless inlet structures above the funnel mouths, each with its own short lower flange; diameter is close to the funnel mouth scale."
+  },
+  {
+    id: "upper_inlet_pipe_left",
+    displayName: "left upper inlet pipe",
+    category: "main_equipment_blockout",
+    version: "v0.5.x",
+    status: "draft_v0.5.x",
+    referenceImages: [
+      "01_reference_frames/B_center_equipment/B_center_06_airflow_4_1_frame_000004.jpg"
+    ],
+    notes: "Left coarse vertical stainless upper connection above the left funnel, enlarged to read as an upper material tube."
+  },
+  {
+    id: "upper_inlet_pipe_right",
+    displayName: "right upper inlet pipe",
+    category: "main_equipment_blockout",
+    version: "v0.5.x",
+    status: "draft_v0.5.x",
+    referenceImages: [
+      "01_reference_frames/B_center_equipment/B_center_06_airflow_4_1_frame_000004.jpg"
+    ],
+    notes: "Right coarse vertical stainless upper connection above the right funnel, enlarged to read as an upper material tube."
   },
   {
     id: "center_vessel",
@@ -118,119 +156,152 @@ export const objectRegistry = [
     id: "left_horizontal_pipe_blockout",
     displayName: "left horizontal pipe blockout",
     category: "main_equipment_blockout",
-    version: "v0.4",
-    status: "draft_v0.4",
+    version: "v0.5.x",
+    status: "draft_v0.5.x",
     referenceImages: [
       "01_reference_frames/A_overall/A_overall_01_airflow_4_1_frame_000001.jpg",
       "01_reference_frames/B_center_equipment/B_center_06_airflow_4_1_frame_000004.jpg"
     ],
-    notes: "Left stainless horizontal valve pipe with rough flange blocks receiving the left funnel neck bend."
+    notes: "Left stainless horizontal valve pipe remains at the raised lid/flange height, with Z returned close to the main equipment plane."
   },
   {
     id: "right_horizontal_pipe_blockout",
     displayName: "right horizontal pipe blockout",
     category: "main_equipment_blockout",
-    version: "v0.4",
-    status: "draft_v0.4",
+    version: "v0.5.x",
+    status: "draft_v0.5.x",
     referenceImages: [
       "01_reference_frames/C_right_equipment/C_right_01_airflow_4_3_interval_0001.jpg",
       "01_reference_frames/C_right_equipment/C_right_04_airflow_4_4_interval_0013.jpg"
     ],
-    notes: "Right stainless horizontal valve pipe; black handwheel is mounted on this pipe, not on a vessel."
+    notes: "Right stainless horizontal valve pipe remains at the raised lid/flange height, with Z returned close to the main equipment plane; black handwheel is mounted on this pipe, not on a vessel."
   },
   {
     id: "left_black_handwheel",
     displayName: "left black handwheel blockout",
     category: "main_equipment_blockout",
-    version: "v0.4",
-    status: "draft_v0.4",
+    version: "v0.5.x",
+    status: "draft_v0.5.x",
     referenceImages: [
       "01_reference_frames/A_overall/A_overall_01_airflow_4_1_frame_000001.jpg"
     ],
-    notes: "Left black handwheel mounted on the left horizontal pipe with simple raised grip blades."
+    notes: "Left black handwheel remains on the raised horizontal pipe; obvious forward offset has been removed."
   },
   {
     id: "right_black_handwheel",
     displayName: "right black handwheel blockout",
     category: "main_equipment_blockout",
-    version: "v0.4",
-    status: "draft_v0.4",
+    version: "v0.5.x",
+    status: "draft_v0.5.x",
     referenceImages: [
       "01_reference_frames/C_right_equipment/C_right_01_airflow_4_3_interval_0001.jpg",
       "01_reference_frames/C_right_equipment/C_right_04_airflow_4_4_interval_0013.jpg"
     ],
-    notes: "Black wheel with simple raised grip blades mounted on the right horizontal pipe, not a vessel."
+    notes: "Right black wheel remains on the raised horizontal pipe; obvious forward offset has been removed."
   },
   {
     id: "right_pipe_couplings",
     displayName: "right pipe couplings blockout",
     category: "main_equipment_blockout",
-    version: "v0.4",
-    status: "draft_v0.4",
+    version: "v0.5.x",
+    status: "draft_v0.5.x",
     referenceImages: [
       "01_reference_frames/C_right_equipment/C_right_02_airflow_4_3_interval_0005.jpg",
       "01_reference_frames/C_right_equipment/C_right_07_airflow_4_2_frame_000013.jpg"
     ],
-    notes: "Coarse grey coupling/flange placeholders on the right horizontal pipe; no fine clamp screws."
+    notes: "Inner coupling/flange placeholder raised with the right valve pipe; no outer wall connection."
   },
   {
     id: "left_white_hose_blockout",
     displayName: "left white hose blockout",
     category: "main_equipment_blockout",
-    version: "v0.4",
-    status: "draft_v0.4",
+    version: "v0.5.x",
+    status: "deprecated_no_display",
     referenceImages: [
       "01_reference_frames/A_overall/A_overall_01_airflow_4_1_frame_000001.jpg"
     ],
-    notes: "Coarse left white hose path with low-density corrugation rings from left valve pipe toward rear wall."
+    notes: "Removed from scene after review: valve outer-side white hose should not extend toward side/rear wall."
   },
   {
     id: "right_white_hose_blockout",
     displayName: "right white hose blockout",
     category: "main_equipment_blockout",
-    version: "v0.4",
-    status: "draft_v0.4",
+    version: "v0.5.x",
+    status: "deprecated_no_display",
     referenceImages: [
       "01_reference_frames/C_right_equipment/C_right_05_airflow_4_2_frame_000004.jpg",
       "01_reference_frames/C_right_equipment/C_right_07_airflow_4_2_frame_000013.jpg"
     ],
-    notes: "Coarse right white hose path with low-density corrugation rings from right valve pipe toward rear/side wall."
+    notes: "Removed from scene after review: valve outer-side white hose should not extend toward side/rear wall."
   },
   {
     id: "main_tubing_blockout",
     displayName: "main tubing blockout",
     category: "main_equipment_blockout",
-    version: "v0.4",
-    status: "draft_v0.4",
+    version: "v0.5.x",
+    status: "draft_v0.5.x",
     referenceImages: [
       "01_reference_frames/B_center_equipment/B_center_02_airflow_4_3_interval_0016.jpg",
       "01_reference_frames/D_rear_wall_top/D_rear_top_02_airflow_4_3_interval_0019.jpg"
     ],
-    notes: "Coarse left/right funnel neck bends into corresponding horizontal valve pipe lines."
+    notes: "Now contains two stainless lower hard pipes with compact vertical drop, 90-degree side turn, and short horizontal connection to the raised black valve lines."
+  },
+  {
+    id: "funnel_lower_hard_pipe_left",
+    displayName: "left funnel lower hard pipe",
+    category: "main_equipment_blockout",
+    version: "v0.5.x",
+    status: "draft_v0.5.x",
+    referenceImages: [
+      "01_reference_frames/B_center_equipment/B_center_02_airflow_4_3_interval_0016.jpg"
+    ],
+    notes: "Single continuous stainless TubeGeometry pipe from the left funnel neck: short vertical drop, compact left 90-degree bend, then short horizontal connection to the left black valve inner side."
+  },
+  {
+    id: "funnel_lower_hard_pipe_right",
+    displayName: "right funnel lower hard pipe",
+    category: "main_equipment_blockout",
+    version: "v0.5.x",
+    status: "draft_v0.5.x",
+    referenceImages: [
+      "01_reference_frames/B_center_equipment/B_center_02_airflow_4_3_interval_0016.jpg"
+    ],
+    notes: "Single continuous stainless TubeGeometry pipe from the right funnel neck: short vertical drop, compact right 90-degree bend, then short horizontal connection to the right black valve inner side."
   },
   {
     id: "rear_ports_blockout",
     displayName: "rear ports blockout",
     category: "main_equipment_blockout",
-    version: "v0.4",
-    status: "draft_v0.4",
+    version: "v0.5.x",
+    status: "deprecated_no_display",
     referenceImages: [
       "01_reference_frames/D_rear_wall_top/D_rear_top_01_airflow_4_3_interval_0012.jpg",
       "01_reference_frames/D_rear_wall_top/D_rear_top_04_airflow_4_4_interval_0049.jpg"
     ],
-    notes: "Expanded rear wall circular interface placeholders and short ports."
+    notes: "Deprecated after structure review: rear wall should remain clean without circular port placeholders."
   },
   {
     id: "top_assembly_blockout",
     displayName: "top assembly blockout",
     category: "main_equipment_blockout",
-    version: "v0.4",
-    status: "draft_v0.4",
+    version: "v0.5.x",
+    status: "draft_v0.5.x",
     referenceImages: [
       "01_reference_frames/A_overall/A_overall_01_airflow_4_1_frame_000001.jpg",
       "01_reference_frames/D_rear_wall_top/D_rear_top_01_airflow_4_3_interval_0012.jpg"
     ],
-    notes: "Large top round metal assembly and left/right handle bars visually connecting the funnel pair to the upper machine."
+    notes: "Shared large round top disk removed after structure review; object now keeps only the black center block and light support bars."
+  },
+  {
+    id: "top_shared_large_round_cover",
+    displayName: "deprecated shared top round cover",
+    category: "main_equipment_blockout",
+    version: "v0.5.x",
+    status: "deprecated_no_display",
+    referenceImages: [
+      "01_reference_frames/A_overall/A_overall_02_airflow_4_1_frame_000003.jpg"
+    ],
+    notes: "Previous single large shared round disk above both funnels; removed because the reference requires two independent upper connector structures."
   },
   {
     id: "top_black_center_block",
@@ -280,23 +351,23 @@ export const objectRegistry = [
     id: "rear_white_disc",
     displayName: "rear white discs",
     category: "rear_wall_detail",
-    version: "v0.4",
-    status: "draft_v0.4",
+    version: "v0.5.x",
+    status: "deprecated_no_display",
     referenceImages: [
       "01_reference_frames/D_rear_wall_top/D_rear_top_03_airflow_4_4_interval_0001.jpg"
     ],
-    notes: "Static white circular rear wall discs for visual detail."
+    notes: "Deprecated after structure review: rear wall should not show white circular discs."
   },
   {
     id: "rear_right_corrugated_hose_blockout",
     displayName: "rear right corrugated hose blockout",
     category: "rear_wall_detail",
-    version: "v0.4",
-    status: "draft_v0.4",
+    version: "v0.5.x",
+    status: "deprecated_no_display",
     referenceImages: [
       "01_reference_frames/D_rear_wall_top/D_rear_top_04_airflow_4_4_interval_0049.jpg"
     ],
-    notes: "Short grey-white corrugated hose blockout on the upper/right rear wall."
+    notes: "Deprecated after structure review to keep the rear wall visually clean."
   },
   {
     id: "workbench_perforation",

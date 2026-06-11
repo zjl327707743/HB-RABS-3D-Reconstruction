@@ -144,6 +144,10 @@ v0.5 moves the dish/lid to the right rear perforated table area, adds the blue s
 
 The v0.5 cleanup pass separates the dish and lid, removes the extra white disc in front of the left clamp, adds static side lift/transfer doors, and simplifies extra hose rings while preserving key flanges and clamps.
 
+The latest structure correction adds two upper hard inlet pipes above the dual funnels, removes the outer white hoses beyond the left/right black valves, and changes the lower funnel-to-valve runs into two dark hard pipes.
+
+The 2026-06-11 correction removes rear-wall circular placeholders and the shared large top disk, then makes the funnel upper connectors and lower bends read as independent stainless hard-pipe structures.
+
 ## Next Step
 
 Proceed to manual v0.5 screenshot review from overall front, straight front, table view, and side/depth views.

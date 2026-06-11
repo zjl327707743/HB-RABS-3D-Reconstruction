@@ -83,6 +83,11 @@ export function createMaterials() {
       metalness: 0.18,
       roughness: 0.48
     }),
+    hardPipeDark: new THREE.MeshStandardMaterial({
+      color: 0x252b31,
+      metalness: 0.62,
+      roughness: 0.28
+    }),
     rearPort: new THREE.MeshStandardMaterial({
       color: 0xa9b1b7,
       metalness: 0.74,

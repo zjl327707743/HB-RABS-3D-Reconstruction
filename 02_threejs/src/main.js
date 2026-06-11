@@ -8,6 +8,7 @@ import { createCamera, CAMERA_PRESETS } from "./scene/cameras.js";
 import { createLights } from "./scene/lights.js";
 import {
   createCenterFunnelPair,
+  createUpperInletPipePair,
   createCenterVessel,
   createCenterVesselLidStack,
   createCenterVesselFlangeRing,
@@ -17,11 +18,8 @@ import { createLeftBlackHandwheel, createRightBlackHandwheel, createRightPipeCou
 import {
   createLeftHorizontalPipeBlockout,
   createRightHorizontalPipeBlockout,
-  createLeftWhiteHoseBlockout,
-  createRightWhiteHoseBlockout,
   createMainTubingBlockout
 } from "./scene/pipesBlockout.js";
-import { createRearPortsBlockout, createRearWhiteDisc, createRearRightCorrugatedHoseBlockout } from "./scene/rearPorts.js";
 import { createTopAssemblyBlockout } from "./scene/topAssembly.js";
 import { createSmallStaticParts } from "./scene/smallParts.js";
 import { createAirflowMistPlanes } from "./scene/airflowMist.js";
@@ -65,6 +63,7 @@ const objects = {
   workbench_perforation: createWorkbenchPerforation(materials),
   glove_ports: createGlovePorts(materials),
   top_assembly_blockout: createTopAssemblyBlockout(materials),
+  upper_inlet_pipe_pair: createUpperInletPipePair(materials),
   center_funnel_pair: createCenterFunnelPair(materials),
   center_vessel: createCenterVessel(materials),
   center_vessel_lid_stack: createCenterVesselLidStack(materials),
@@ -75,12 +74,7 @@ const objects = {
   left_black_handwheel: createLeftBlackHandwheel(materials),
   right_black_handwheel: createRightBlackHandwheel(materials),
   right_pipe_couplings: createRightPipeCouplings(materials),
-  left_white_hose_blockout: createLeftWhiteHoseBlockout(materials),
-  right_white_hose_blockout: createRightWhiteHoseBlockout(materials),
   main_tubing_blockout: createMainTubingBlockout(materials),
-  rear_ports_blockout: createRearPortsBlockout(materials),
-  rear_white_disc: createRearWhiteDisc(materials),
-  rear_right_corrugated_hose_blockout: createRearRightCorrugatedHoseBlockout(materials),
   small_static_parts: createSmallStaticParts(materials),
   airflow_mist_planes: createAirflowMistPlanes(materials),
   lights_camera: createLights()

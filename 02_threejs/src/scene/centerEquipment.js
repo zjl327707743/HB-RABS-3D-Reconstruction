@@ -58,6 +58,57 @@ export function createCenterFunnelPair(materials) {
   return group;
 }
 
+export function createUpperInletPipePair(materials) {
+  const group = new THREE.Group();
+  group.name = "upper_inlet_pipe_pair";
+  group.userData.id = "upper_inlet_pipe_pair";
+
+  [-0.58, 0.58].forEach((x, index) => {
+    const side = index === 0 ? "left" : "right";
+    const pipe = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.5, 0.5, 0.66, 64),
+      materials.polishedSteel
+    );
+    pipe.name = `upper_inlet_pipe_${side}`;
+    pipe.position.set(x, SCENE_SCALE.funnelPairY + 0.86, SCENE_SCALE.centerEquipmentZ);
+    pipe.userData.id = `upper_inlet_pipe_${side}`;
+
+    const topCollar = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.58, 0.58, 0.08, 64),
+      materials.equipmentDarkSteel
+    );
+    topCollar.name = `upper_inlet_pipe_${side}_top_collar`;
+    topCollar.position.set(x, SCENE_SCALE.funnelPairY + 1.22, SCENE_SCALE.centerEquipmentZ);
+    topCollar.userData.id = `upper_inlet_pipe_${side}`;
+
+    const lowerCollar = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.62, 0.6, 0.1, 64),
+      materials.polishedSteel
+    );
+    lowerCollar.name = `upper_inlet_pipe_${side}_lower_collar`;
+    lowerCollar.position.set(x, SCENE_SCALE.funnelPairY + 0.49, SCENE_SCALE.centerEquipmentZ);
+    lowerCollar.userData.id = `upper_inlet_pipe_${side}`;
+
+    const lowerFlange = new THREE.Mesh(
+      new THREE.TorusGeometry(0.57, 0.035, 10, 56),
+      materials.equipmentDarkSteel
+    );
+    lowerFlange.name = `upper_inlet_pipe_${side}_short_flange_ring`;
+    lowerFlange.rotation.x = Math.PI / 2;
+    lowerFlange.position.set(x, SCENE_SCALE.funnelPairY + 0.42, SCENE_SCALE.centerEquipmentZ);
+    lowerFlange.userData.id = `upper_inlet_pipe_${side}`;
+
+    group.add(pipe, topCollar, lowerCollar, lowerFlange);
+  });
+
+  setId(group, "upper_inlet_pipe_pair");
+  group.children.forEach((child) => {
+    if (child.name.includes("_left")) child.userData.id = "upper_inlet_pipe_left";
+    if (child.name.includes("_right")) child.userData.id = "upper_inlet_pipe_right";
+  });
+  return group;
+}
+
 export function createCenterVessel(materials) {
   const group = new THREE.Group();
   group.name = "center_vessel";

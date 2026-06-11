@@ -23,7 +23,10 @@ export const SCENE_SCALE = {
   centerEquipmentZ: -0.85,
   centerVesselY: 1.25,
   funnelPairY: 3.75,
-  valvePipeZ: -0.35,
+  valvePipeY: 2.08,
+  valvePipeZ: -0.78,
+  centerVesselAvoidRadius: 0.95,
+  centerVesselPipeClearance: 0.28,
   rightEquipmentX: 2.85,
   rightEquipmentZ: -0.45
 };

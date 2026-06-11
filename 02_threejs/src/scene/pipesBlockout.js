@@ -10,17 +10,6 @@ function setId(object, id) {
   });
 }
 
-function makeTube(name, points, radius, material, id) {
-  const curve = new THREE.CatmullRomCurve3(points.map((p) => new THREE.Vector3(...p)));
-  const mesh = new THREE.Mesh(
-    new THREE.TubeGeometry(curve, 36, radius, 18, false),
-    material
-  );
-  mesh.name = name;
-  setId(mesh, id);
-  return mesh;
-}
-
 function horizontalPipe(id, name, x, y, z, length, materials) {
   const mesh = new THREE.Mesh(
     new THREE.CylinderGeometry(0.13, 0.13, length, 36),
@@ -35,7 +24,7 @@ function horizontalPipe(id, name, x, y, z, length, materials) {
   group.userData.id = id;
   group.add(mesh);
 
-  [-0.62, 0.62].forEach((offset, index) => {
+  [-0.34, 0.34].forEach((offset, index) => {
     const flange = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.14, 32), materials.equipmentDarkSteel);
     flange.name = `${name}_flange_${index + 1}`;
     flange.rotation.z = Math.PI / 2;
@@ -47,57 +36,67 @@ function horizontalPipe(id, name, x, y, z, length, materials) {
   return group;
 }
 
+function createLowerHardPipe(side, materials) {
+  const id = `funnel_lower_hard_pipe_${side}`;
+  const s = SCENE_SCALE;
+  const sign = side === "left" ? -1 : 1;
+  const pipeX = sign * 0.58;
+  const vesselRadius = s.centerVesselAvoidRadius;
+  const clearance = s.centerVesselPipeClearance;
+  const turnX = sign * (vesselRadius + clearance - 0.08);
+  const valveInnerX = sign * 1.48;
+  const neckBottomY = 3.12;
+  const dropY = 2.48;
+  const valveCenterY = s.valvePipeY;
+  const neckZ = s.centerEquipmentZ;
+  const valveCenterZ = s.valvePipeZ;
+  const radius = 0.16;
+
+  const anchors = {
+    start: new THREE.Vector3(pipeX, neckBottomY, neckZ),
+    drop: new THREE.Vector3(pipeX, dropY, neckZ),
+    elbowControl: new THREE.Vector3(pipeX, valveCenterY, valveCenterZ),
+    horizontalStart: new THREE.Vector3(turnX, valveCenterY, valveCenterZ),
+    end: new THREE.Vector3(valveInnerX, valveCenterY, valveCenterZ)
+  };
+
+  const path = new THREE.CurvePath();
+  path.add(new THREE.LineCurve3(anchors.start, anchors.drop));
+  path.add(new THREE.QuadraticBezierCurve3(anchors.drop, anchors.elbowControl, anchors.horizontalStart));
+  path.add(new THREE.LineCurve3(anchors.horizontalStart, anchors.end));
+
+  const mesh = new THREE.Mesh(
+    new THREE.TubeGeometry(path, 36, radius, 24, false),
+    materials.polishedSteel
+  );
+  mesh.name = id;
+  setId(mesh, id);
+  mesh.userData.anchors = Object.fromEntries(
+    Object.entries(anchors).map(([key, value]) => [key, value.toArray()])
+  );
+  mesh.userData.vesselAvoidance = {
+    vesselRadius,
+    clearance,
+    frontOffsetZ: Math.abs(valveCenterZ - neckZ),
+    minAbsXAfterTurn: Math.abs(turnX)
+  };
+  return mesh;
+}
+
 export function createLeftHorizontalPipeBlockout(materials) {
-  return horizontalPipe("left_horizontal_pipe_blockout", "left_horizontal_stainless_pipe", -2.45, 1.62, SCENE_SCALE.valvePipeZ, 1.8, materials);
+  return horizontalPipe("left_horizontal_pipe_blockout", "left_horizontal_stainless_pipe", -2.12, SCENE_SCALE.valvePipeY, SCENE_SCALE.valvePipeZ, 1.25, materials);
 }
 
 export function createRightHorizontalPipeBlockout(materials) {
-  return horizontalPipe("right_horizontal_pipe_blockout", "right_horizontal_stainless_pipe", 2.45, 1.62, SCENE_SCALE.valvePipeZ, 1.8, materials);
-}
-
-export function createLeftWhiteHoseBlockout(materials) {
-  const group = new THREE.Group();
-  group.name = "left_white_hose_blockout";
-  group.userData.id = "left_white_hose_blockout";
-  group.add(makeTube("left_white_hose_curve", [
-    [-3.18, 1.62, SCENE_SCALE.valvePipeZ],
-    [-3.65, 1.9, -0.65],
-    [-3.85, 2.4, SCENE_SCALE.rearWallZ + 0.2]
-  ], 0.15, materials.tubeBlockout, "left_white_hose_blockout"));
-  return group;
-}
-
-export function createRightWhiteHoseBlockout(materials) {
-  const group = new THREE.Group();
-  group.name = "right_white_hose_blockout";
-  group.userData.id = "right_white_hose_blockout";
-  group.add(makeTube("right_white_hose_curve", [
-    [3.18, 1.62, SCENE_SCALE.valvePipeZ],
-    [3.65, 1.9, -0.65],
-    [3.85, 2.4, SCENE_SCALE.rearWallZ + 0.2]
-  ], 0.15, materials.tubeBlockout, "right_white_hose_blockout"));
-  return group;
+  return horizontalPipe("right_horizontal_pipe_blockout", "right_horizontal_stainless_pipe", 2.12, SCENE_SCALE.valvePipeY, SCENE_SCALE.valvePipeZ, 1.25, materials);
 }
 
 export function createMainTubingBlockout(materials) {
   const group = new THREE.Group();
   group.name = "main_tubing_blockout";
   group.userData.id = "main_tubing_blockout";
-  const s = SCENE_SCALE;
-
-  group.add(makeTube("left_funnel_neck_to_left_valve_pipe", [
-    [-0.58, 3.25, s.centerEquipmentZ],
-    [-0.74, 2.55, s.centerEquipmentZ + 0.05],
-    [-1.35, 1.95, s.valvePipeZ],
-    [-1.72, 1.62, s.valvePipeZ]
-  ], 0.14, materials.tubeBlockout, "main_tubing_blockout"));
-
-  group.add(makeTube("right_funnel_neck_to_right_valve_pipe", [
-    [0.58, 3.25, s.centerEquipmentZ],
-    [0.74, 2.55, s.centerEquipmentZ + 0.05],
-    [1.35, 1.95, s.valvePipeZ],
-    [1.72, 1.62, s.valvePipeZ]
-  ], 0.14, materials.tubeBlockout, "main_tubing_blockout"));
+  group.add(createLowerHardPipe("left", materials));
+  group.add(createLowerHardPipe("right", materials));
 
   return group;
 }

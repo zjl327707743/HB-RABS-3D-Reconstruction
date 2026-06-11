@@ -29,9 +29,13 @@
 
 | ID | 名称 | 区域 | 描述 | 状态 | 优先级 |
 |----|------|------|------|------|--------|
-| `top_assembly_blockout` | 顶部总成占位 | 中央设备 | 顶部大圆形法兰盘、黑色中心块、左右横杆/把手 | draft_v0.4 | P1 |
+| `top_assembly_blockout` | 顶部总成占位 | 中央设备 | 已移除共享大圆盘，保留黑色中心块和轻量横杆 | draft_v0.5.x | P1 |
+| `top_shared_large_round_cover` | 已弃用顶部共享大圆盖 | 中央设备 | 旧的单个大圆盘顶部结构已停用，不再显示 | deprecated_no_display | P1 |
 | `top_black_center_block` | 顶部黑色中心块 | 中央设备 | 顶部总成上的黑色矩形遮挡块 | draft_v0.4 | P1 |
 | `center_funnel_pair` | 中央双漏斗占位 | 中央设备 | 顶部两个不锈钢漏斗、厚上口、短颈和粗略卡箍环 | draft_v0.4 | P1 |
+| `upper_inlet_pipe_pair` | 上接硬管组 | 中央设备 | 双漏斗上方左右两个独立加粗不锈钢上接结构，带各自短法兰 | draft_v0.5.x | P1 |
+| `upper_inlet_pipe_left` | 左上接硬管 | 中央设备 | 左漏斗上方独立粗上接管 | draft_v0.5.x | P1 |
+| `upper_inlet_pipe_right` | 右上接硬管 | 中央设备 | 右漏斗上方独立粗上接管 | draft_v0.5.x | P1 |
 | `center_funnel` | 中央漏斗 | 中央设备 | 加料漏斗主体 | planned | P1 |
 | `center_vessel` | 中央罐体 | 中央设备 | 中央处理罐/容器 blockout，当前唯一主圆筒罐体 | draft_v0.4 | P1 |
 | `center_vessel_lid_stack` | 中央罐盖层 | 中央设备 | 多层上盖和中心短立管/小接口 | draft_v0.4 | P1 |
@@ -43,16 +47,16 @@
 | ID | 名称 | 区域 | 描述 | 状态 | 优先级 |
 |----|------|------|------|------|--------|
 | `right_vessel` | 右侧罐体 | 右侧设备 | v0.3 误建对象；v0.3.1 已从场景停用 | removed_or_deprecated_v0.3.1 | P1 |
-| `right_horizontal_pipe_blockout` | 右侧横向管路 | 右侧设备 | 右侧不锈钢横向管路和粗略法兰 blockout | draft_v0.4 | P1 |
-| `right_black_handwheel` | 右侧黑色手轮 | 右侧设备 | 安装在右侧横向管路上的带叶片黑色手轮 | draft_v0.4 | P1 |
-| `right_pipe_couplings` | 右侧管路接头 | 右侧设备 | 右侧横向管路灰色接头/法兰占位 | draft_v0.4 | P2 |
+| `right_horizontal_pipe_blockout` | 右侧横向管路 | 右侧设备 | 右侧横向阀门管保持上盖/法兰高度，Z 位收回到接近主体平面 | draft_v0.5.x | P1 |
+| `right_black_handwheel` | 右侧黑色手轮 | 右侧设备 | 右侧黑色手轮随横向管保持上盖/法兰高度，取消明显前移 | draft_v0.5.x | P1 |
+| `right_pipe_couplings` | 右侧管路接头 | 右侧设备 | 内侧必要接头随阀门管上移，外侧接头已删除 | draft_v0.5.x | P2 |
 
 ### 左侧设备
 
 | ID | 名称 | 区域 | 描述 | 状态 | 优先级 |
 |----|------|------|------|------|--------|
-| `left_horizontal_pipe_blockout` | 左侧横向管路 | 左侧设备 | 左侧不锈钢横向管路和粗略法兰 blockout | draft_v0.4 | P1 |
-| `left_black_handwheel` | 左侧黑色手轮 | 左侧设备 | 安装在左侧横向管路上的带叶片黑色手轮 | draft_v0.4 | P1 |
+| `left_horizontal_pipe_blockout` | 左侧横向管路 | 左侧设备 | 左侧横向阀门管保持上盖/法兰高度，Z 位收回到接近主体平面 | draft_v0.5.x | P1 |
+| `left_black_handwheel` | 左侧黑色手轮 | 左侧设备 | 左侧黑色手轮随横向管保持上盖/法兰高度，取消明显前移 | draft_v0.5.x | P1 |
 
 ### 侧门/传递小门
 
@@ -69,18 +73,20 @@
 
 | ID | 名称 | 区域 | 描述 | 状态 | 优先级 |
 |----|------|------|------|------|--------|
-| `rear_ports_blockout` | 后壁端口占位 | 后壁 | 后壁圆形接口/基础喷口占位 | draft_v0.4 | P2 |
-| `rear_white_disc` | 后壁白色圆片 | 后壁 | 后壁静态白色圆片细节 | draft_v0.4 | P2 |
-| `rear_right_corrugated_hose_blockout` | 后壁右上褶皱软管 | 后壁 | 后壁右上方灰白粗软管占位 | draft_v0.4 | P2 |
+| `rear_ports_blockout` | 后壁端口占位 | 后壁 | 后壁圆形端口占位已停用，背板保持干净 | deprecated_no_display | P2 |
+| `rear_white_disc` | 后壁白色圆片 | 后壁 | 后壁白色圆片已停用 | deprecated_no_display | P2 |
+| `rear_right_corrugated_hose_blockout` | 后壁右上褶皱软管 | 后壁 | 后壁软管占位已停用以保持背板干净 | deprecated_no_display | P2 |
 | `rear_ports` | 后壁端口 | 后壁 | 后壁管路接口/端口 | planned | P2 |
 
 ### 管路系统
 
 | ID | 名称 | 区域 | 描述 | 状态 | 优先级 |
 |----|------|------|------|------|--------|
-| `main_tubing_blockout` | 主要管路占位 | 管路 | 左右漏斗下颈到左右横向阀门管线的粗略弯管 | draft_v0.4 | P2 |
-| `left_white_hose_blockout` | 左侧白色软管 | 管路 | 左侧阀门管线后的白色软管；v0.5 已移除多余小环纹 | final_draft_v0.5 | P2 |
-| `right_white_hose_blockout` | 右侧白色软管 | 管路 | 右侧阀门管线后的白色软管；v0.5 已移除多余小环纹 | final_draft_v0.5 | P2 |
+| `main_tubing_blockout` | 主要管路占位 | 管路 | 现在包含左右两根漏斗下方不锈钢硬弯管 | draft_v0.5.x | P2 |
+| `funnel_lower_hard_pipe_left` | 左漏斗下方硬管 | 管路 | 连续一体 TubeGeometry：短竖直段、紧凑 90° 左拐、短水平段接入左阀门 | draft_v0.5.x | P2 |
+| `funnel_lower_hard_pipe_right` | 右漏斗下方硬管 | 管路 | 连续一体 TubeGeometry：短竖直段、紧凑 90° 右拐、短水平段接入右阀门 | draft_v0.5.x | P2 |
+| `left_white_hose_blockout` | 左侧白色软管 | 管路 | 左阀门外侧延伸白管已删除/停用，不再显示 | deprecated_no_display | P2 |
+| `right_white_hose_blockout` | 右侧白色软管 | 管路 | 右阀门外侧延伸白管已删除/停用，不再显示 | deprecated_no_display | P2 |
 | `tubing_system` | 管路系统 | 管路 | 各类管路、管道 | planned | P2 |
 | `clamps_flanges` | 法兰卡箍 | 连接件 | 法兰连接、卡箍固定件 | planned | P2 |
 
@@ -110,9 +116,9 @@
 
 ## 统计
 
-| 总数 | planned | draft_v0.2 | draft_v0.2.1 | draft_v0.4 | draft_v0.5 | final_draft_v0.5 | removed_or_deprecated_v0.3.1 | removed_or_hidden_v0.5 | in_progress | confirmed |
-|------|---------|------------|--------------|------------|------------|------------------|-------------------------------|------------------------|-------------|-----------|
-| 49 | 8 | 5 | 1 | 16 | 6 | 11 | 1 | 1 | 0 | 0 |
+| 总数 | planned | draft_v0.2 | draft_v0.2.1 | draft_v0.4 | draft_v0.5 | draft_v0.5.x | final_draft_v0.5 | removed_or_deprecated_v0.3.1 | removed_or_hidden_v0.5 | deprecated_no_display | in_progress | confirmed |
+|------|---------|------------|--------------|------------|------------|--------------|------------------|-------------------------------|------------------------|-----------------------|-------------|-----------|
+| 54 | 8 | 5 | 1 | 15 | 6 | 6 | 9 | 1 | 1 | 2 | 0 | 0 |
 
 ## v0.2 备注
 
@@ -158,6 +164,8 @@
 - 扳手与小方形台已适度放大；工作台中后部/右侧打孔增强；雾片与玻璃透明度调低。
 - `right_vessel` 保持 `removed_or_deprecated_v0.3.1`，v0.2.1 四手套孔未修改；未添加人物、手臂、动作或粒子烟雾。
 - v0.5 收尾修正新增左右侧静态升降/传递小门，删除左侧卡箍前白色圆片，并移除白色软管多余小环纹。
+- v0.5.x 管路结构纠偏新增双漏斗上方两根上接硬管；左右阀门外侧白管已停用；漏斗下方两根管改为黑灰硬质弯管。
+- 2026-06-11 真实性纠偏：后壁圆形端口/圆片停用，顶部共享大圆盘移除，漏斗上下连接改为更接近参考图的独立不锈钢硬管结构。
 
 ## 最后更新
 
