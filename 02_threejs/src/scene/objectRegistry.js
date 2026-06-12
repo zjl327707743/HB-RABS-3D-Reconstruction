@@ -389,7 +389,6 @@ export const objectRegistry = [
     childObjects: [
       "static_dish",
       "static_dish_lid",
-      "blue_sterile_wrap",
       "small_metal_funnel_part",
       "loose_connector_part",
       "left_loose_clamp",
@@ -402,7 +401,7 @@ export const objectRegistry = [
       "01_reference_frames/E_tools_small_parts/E_tools_01_image_补充1-卡箍.png",
       "01_reference_frames/E_tools_small_parts/E_tools_02_image-补充2-培养皿.png"
     ],
-    notes: "Static tabletop detail set refined in v0.5; no hand, arm, tool motion, or tweezer action."
+    notes: "Static tabletop detail set refined in v0.5; blue support sheet under the funnel part is hidden, and small parts use simple transparent sterile bags."
   },
   {
     id: "static_pad_disc",
@@ -441,13 +440,13 @@ export const objectRegistry = [
     id: "blue_sterile_wrap",
     displayName: "blue sterile wrap",
     category: "small_static_detail",
-    version: "v0.5",
-    status: "final_draft_v0.5",
+    version: "v0.5.1",
+    status: "removed_or_hidden_v0.5.1",
     referenceImages: [
       "01_reference_frames/overview/image_补充1-卡箍.png",
       "01_reference_frames/overview/image-补充2-培养皿.png"
     ],
-    notes: "Light blue translucent folded sheet under the metal loose parts on the center-right workbench."
+    notes: "Removed/hidden so the small metal funnel part is not sitting on blue paper."
   },
   {
     id: "small_metal_funnel_part",
@@ -502,7 +501,7 @@ export const objectRegistry = [
     referenceImages: [
       "01_reference_frames/overview/image_补充1-卡箍.png"
     ],
-    notes: "Transparent sterile bag enclosing the left loose clamp parts; blue-tinted film with seal edge."
+    notes: "Simple transparent soft sterile bag enclosing the left loose clamp; clamp shifted slightly left to avoid bag/body interference."
   },
   {
     id: "funnel_part_sterile_bag",
@@ -513,7 +512,7 @@ export const objectRegistry = [
     referenceImages: [
       "01_reference_frames/overview/image_补充1-卡箍.png"
     ],
-    notes: "Transparent sterile bag enclosing the small metal funnel part; blue-tinted film with seal edge."
+    notes: "Simple transparent soft sterile bag enclosing the small metal funnel part without a blue support sheet underneath."
   },
   {
     id: "petri_dish_sterile_bag",
@@ -524,7 +523,7 @@ export const objectRegistry = [
     referenceImages: [
       "01_reference_frames/overview/image-补充2-培养皿.png"
     ],
-    notes: "Transparent sterile bag enclosing the petri dish and lid together; blue-tinted film with seal edge."
+    notes: "Simple transparent soft sterile bag enclosing the petri dish and lid together; dish group shifted slightly right."
   },
   {
     id: "airflow_mist_planes",

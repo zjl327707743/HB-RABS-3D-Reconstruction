@@ -19,25 +19,60 @@ function markBag(object, id) {
   });
 }
 
-function createSterileBag(bodyDims, sealDims, materials) {
+function createRoundedRectShape(width, depth, radius) {
+  const x = width / 2;
+  const z = depth / 2;
+  const r = Math.min(radius, x, z);
+  const shape = new THREE.Shape();
+
+  shape.moveTo(-x + r, -z);
+  shape.lineTo(x - r, -z);
+  shape.quadraticCurveTo(x, -z, x, -z + r);
+  shape.lineTo(x, z - r);
+  shape.quadraticCurveTo(x, z, x - r, z);
+  shape.lineTo(-x + r, z);
+  shape.quadraticCurveTo(-x, z, -x, z - r);
+  shape.lineTo(-x, -z + r);
+  shape.quadraticCurveTo(-x, -z, -x + r, -z);
+  return shape;
+}
+
+function createSterileBag(dims, materials) {
   const bag = new THREE.Group();
+  const shape = createRoundedRectShape(dims.w, dims.d, dims.r ?? 0.12);
 
-  const body = new THREE.Mesh(
-    new THREE.BoxGeometry(bodyDims.w, bodyDims.h, bodyDims.d, 2, 2, 2),
-    materials.sterileBag
-  );
-  bag.add(body);
+  const bottom = new THREE.Mesh(new THREE.ShapeGeometry(shape), materials.sterileBag);
+  bottom.name = "sterile_bag_bottom_film";
+  bottom.rotation.x = -Math.PI / 2;
+  bottom.position.y = -0.02;
+  bag.add(bottom);
 
-  if (sealDims) {
-    const seal = new THREE.Mesh(
-      new THREE.PlaneGeometry(sealDims.w, sealDims.h),
+  const topGeometry = new THREE.ShapeGeometry(shape, 4);
+  const positions = topGeometry.attributes.position;
+  for (let i = 0; i < positions.count; i += 1) {
+    const x = positions.getX(i) / (dims.w / 2);
+    const z = positions.getY(i) / (dims.d / 2);
+    const dome = Math.max(0, 1 - 0.34 * (x * x + z * z));
+    positions.setZ(i, (dims.h ?? 0.22) * dome);
+  }
+  topGeometry.computeVertexNormals();
+
+  const top = new THREE.Mesh(topGeometry, materials.sterileBag);
+  top.name = "sterile_bag_top_soft_film";
+  top.rotation.x = -Math.PI / 2;
+  top.position.y = 0.025;
+  bag.add(top);
+
+  if (dims.crease) {
+    const crease = new THREE.Mesh(
+      new THREE.PlaneGeometry(dims.w * 0.72, 0.018),
       materials.sterileBagSeal
     );
-    seal.position.copy(sealDims.pos);
-    seal.rotation.set(sealDims.rotX ?? 0, sealDims.rotY ?? 0, sealDims.rotZ ?? 0);
-    bag.add(seal);
+    crease.name = "sterile_bag_soft_crease";
+    crease.rotation.set(-Math.PI / 2, 0, dims.creaseRot ?? -0.18);
+    crease.position.set(0, (dims.h ?? 0.22) + 0.018, 0);
+    bag.add(crease);
   }
-
   return bag;
 }
 
@@ -47,7 +82,7 @@ export function createSmallStaticParts(materials) {
   group.userData.id = "small_static_parts";
   const y = SCENE_SCALE.tableHeight + 0.08;
 
-  const dishX = 3.08;
+  const dishX = 3.22;
   const dishZ = -1.52;
   const dishBase = new THREE.Mesh(new THREE.CylinderGeometry(0.47, 0.47, 0.045, 56), materials.dishGlass);
   dishBase.name = "static_dish";
@@ -63,7 +98,7 @@ export function createSmallStaticParts(materials) {
   const dishLid = new THREE.Mesh(new THREE.TorusGeometry(0.38, 0.016, 10, 48), materials.dishGlass);
   dishLid.name = "static_dish_lid";
   dishLid.rotation.x = Math.PI / 2;
-  dishLid.position.set(3.72, y + 0.075, -1.72);
+  dishLid.position.set(3.86, y + 0.075, -1.72);
   mark(dishLid, "static_dish_lid");
 
   const dishMedia = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.018, 40), materials.dishAmber);
@@ -71,51 +106,39 @@ export function createSmallStaticParts(materials) {
   dishMedia.position.set(dishX + 0.18, y + 0.055, dishZ - 0.04);
   mark(dishMedia, "static_dish");
 
-  const wrap = new THREE.Mesh(new THREE.PlaneGeometry(1.28, 0.92, 2, 2), materials.blueSterileWrap);
-  wrap.name = "blue_sterile_wrap";
-  wrap.position.set(1.66, y + 0.032, -0.9);
-  wrap.rotation.set(-Math.PI / 2, 0, -0.18);
-  mark(wrap, "blue_sterile_wrap");
-
-  const wrapFold = new THREE.Mesh(new THREE.PlaneGeometry(0.78, 0.32), materials.blueSterileWrap);
-  wrapFold.name = "blue_sterile_wrap_fold";
-  wrapFold.position.set(1.98, y + 0.075, -0.68);
-  wrapFold.rotation.set(-Math.PI / 2.25, 0.12, -0.28);
-  mark(wrapFold, "blue_sterile_wrap");
-
   const funnelTool = new THREE.Mesh(new THREE.ConeGeometry(0.28, 0.48, 36, 1, true), materials.polishedSteel);
   funnelTool.name = "small_metal_funnel_part";
   funnelTool.rotation.set(Math.PI / 2, 0.15, -0.55);
-  funnelTool.position.set(1.62, y + 0.19, -0.88);
+  funnelTool.position.set(1.62, y + 0.33, -0.88);
   mark(funnelTool, "small_metal_funnel_part");
 
   const funnelRim = new THREE.Mesh(new THREE.TorusGeometry(0.28, 0.025, 10, 36), materials.equipmentDarkSteel);
   funnelRim.name = "small_metal_funnel_part_rim";
   funnelRim.rotation.set(Math.PI / 2, 0.15, -0.55);
-  funnelRim.position.set(1.41, y + 0.19, -0.76);
+  funnelRim.position.set(1.41, y + 0.33, -0.76);
   mark(funnelRim, "small_metal_funnel_part");
 
   const funnelNeck = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 0.34, 24), materials.equipmentDarkSteel);
   funnelNeck.name = "small_metal_funnel_part_short_tube";
   funnelNeck.rotation.set(Math.PI / 2, 0.15, -0.55);
-  funnelNeck.position.set(1.92, y + 0.18, -1.04);
+  funnelNeck.position.set(1.92, y + 0.32, -1.04);
   mark(funnelNeck, "small_metal_funnel_part");
 
   const looseConnector = new THREE.Mesh(new THREE.TorusGeometry(0.16, 0.035, 10, 32), materials.equipmentDarkSteel);
   looseConnector.name = "loose_connector_part";
   looseConnector.rotation.set(Math.PI / 2, 0.05, 0.35);
-  looseConnector.position.set(1.16, y + 0.09, -0.48);
+  looseConnector.position.set(1.16, y + 0.23, -0.48);
   mark(looseConnector, "loose_connector_part");
 
   const clampArc = new THREE.Mesh(new THREE.TorusGeometry(0.36, 0.045, 10, 42, Math.PI * 1.52), materials.equipmentDarkSteel);
   clampArc.name = "left_loose_clamp_arc";
   clampArc.rotation.set(Math.PI / 2, 0, 0.42);
-  clampArc.position.set(-1.42, y + 0.08, -0.16);
+  clampArc.position.set(-1.62, y + 0.08, -0.16);
   mark(clampArc, "left_loose_clamp");
 
   const clampLock = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.1, 0.12), materials.equipmentDarkSteel);
   clampLock.name = "left_loose_clamp_lock_block";
-  clampLock.position.set(-1.1, y + 0.1, -0.02);
+  clampLock.position.set(-1.3, y + 0.1, -0.02);
   clampLock.rotation.y = 0.35;
   mark(clampLock, "left_loose_clamp");
 
@@ -140,46 +163,31 @@ export function createSmallStaticParts(materials) {
 
   // Clamp sterile bag
   const clampBag = createSterileBag(
-    { w: 0.88, h: 0.19, d: 0.82 },
-    {
-      w: 0.88, h: 0.12,
-      pos: new THREE.Vector3(-0.22, 0.13, 0.14),
-      rotX: Math.PI * 0.42, rotY: 0, rotZ: 0
-    },
+    { w: 1.16, h: 0.34, d: 1.02, r: 0.16, crease: true, creaseRot: 0.12 },
     materials
   );
   clampBag.name = "clamp_sterile_bag";
-  clampBag.position.set(-1.26, y + 0.13, -0.1);
+  clampBag.position.set(-1.56, y - 0.005, -0.1);
   clampBag.rotation.set(0, 0.18, 0);
   markBag(clampBag, "clamp_sterile_bag");
 
   // Funnel part sterile bag
   const funnelBag = createSterileBag(
-    { w: 0.74, h: 0.52, d: 0.86 },
-    {
-      w: 0.70, h: 0.14,
-      pos: new THREE.Vector3(-0.06, 0.30, 0.24),
-      rotX: Math.PI * 0.44, rotY: 0, rotZ: 0.08
-    },
+    { w: 1.36, h: 1.42, d: 1.28, r: 0.18, crease: true, creaseRot: -0.22 },
     materials
   );
   funnelBag.name = "funnel_part_sterile_bag";
-  funnelBag.position.set(1.68, y + 0.28, -0.92);
+  funnelBag.position.set(1.67, y - 0.005, -0.84);
   funnelBag.rotation.set(0, 0.2, 0);
   markBag(funnelBag, "funnel_part_sterile_bag");
 
   // Petri dish sterile bag (covers dish + lid together)
   const petriBag = createSterileBag(
-    { w: 1.44, h: 0.14, d: 1.18 },
-    {
-      w: 1.36, h: 0.11,
-      pos: new THREE.Vector3(-0.08, 0.10, 0.40),
-      rotX: Math.PI * 0.38, rotY: 0, rotZ: 0
-    },
+    { w: 1.84, h: 0.3, d: 1.28, r: 0.18, crease: true, creaseRot: -0.08 },
     materials
   );
   petriBag.name = "petri_dish_sterile_bag";
-  petriBag.position.set(3.38, y + 0.09, -1.61);
+  petriBag.position.set(3.56, y - 0.005, -1.61);
   petriBag.rotation.set(0, -0.06, 0);
   markBag(petriBag, "petri_dish_sterile_bag");
 
@@ -188,8 +196,6 @@ export function createSmallStaticParts(materials) {
     dishRim,
     dishLid,
     dishMedia,
-    wrap,
-    wrapFold,
     funnelTool,
     funnelRim,
     funnelNeck,
