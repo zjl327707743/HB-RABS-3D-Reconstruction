@@ -108,11 +108,11 @@ function makeHandwheel(id, x, y, z, side, materials) {
 }
 
 export function createLeftBlackHandwheel(materials) {
-  return makeHandwheel("left_black_handwheel", -2.26, SCENE_SCALE.valvePipeY, SCENE_SCALE.valvePipeZ, -1, materials);
+  return makeHandwheel("left_black_handwheel", -1.58, SCENE_SCALE.valvePipeY, SCENE_SCALE.valvePipeZ, -1, materials);
 }
 
 export function createRightBlackHandwheel(materials) {
-  return makeHandwheel("right_black_handwheel", 4.02, SCENE_SCALE.valvePipeY, SCENE_SCALE.valvePipeZ, 1, materials);
+  return makeHandwheel("right_black_handwheel", 3.38, SCENE_SCALE.valvePipeY, SCENE_SCALE.valvePipeZ, 1, materials);
 }
 
 export function createRightPipeCouplings(materials) {
@@ -123,7 +123,7 @@ export function createRightPipeCouplings(materials) {
   const y = SCENE_SCALE.valvePipeY;
   const z = SCENE_SCALE.valvePipeZ;
   [
-    ["right_coupling_inner", 3.94]
+    ["right_coupling_inner", 3.32]
   ].forEach(([name, x]) => {
     const ring = horizontalCylinder(name, x, y, z, 0.18, 0.2, materials.equipmentDarkSteel, "right_pipe_couplings");
     group.add(ring);

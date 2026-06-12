@@ -21,30 +21,46 @@ function createFunnel(id, x, materials) {
   upperRim.name = `${id}_thick_upper_rim`;
   upperRim.position.set(x, SCENE_SCALE.funnelPairY + 0.44, SCENE_SCALE.centerEquipmentZ);
 
-  const cone = new THREE.Mesh(
-    new THREE.ConeGeometry(0.54, 0.76, 56, 1, true),
-    materials.equipmentSteel
-  );
-  cone.name = `${id}_stainless_cone`;
-  cone.position.set(x, SCENE_SCALE.funnelPairY + 0.04, SCENE_SCALE.centerEquipmentZ);
-  cone.rotation.x = Math.PI;
+  const isMiddle = id.startsWith("middle");
 
-  const neck = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.16, 0.2, 0.46, 36),
-    materials.equipmentDarkSteel
-  );
-  neck.name = `${id}_short_neck`;
-  neck.position.set(x, SCENE_SCALE.funnelPairY - 0.43, SCENE_SCALE.centerEquipmentZ);
+  if (isMiddle) {
+    // Middle funnel: cone + neck + clamp → soft hose
+    const cone = new THREE.Mesh(
+      new THREE.ConeGeometry(0.54, 0.76, 56, 1, true),
+      materials.equipmentSteel
+    );
+    cone.name = `${id}_stainless_cone`;
+    cone.position.set(x, SCENE_SCALE.funnelPairY + 0.04, SCENE_SCALE.centerEquipmentZ);
+    cone.rotation.x = Math.PI;
 
-  const clamp = new THREE.Mesh(
-    new THREE.TorusGeometry(0.21, 0.028, 10, 32),
-    materials.equipmentDarkSteel
-  );
-  clamp.name = `${id}_neck_clamp_ring`;
-  clamp.rotation.x = Math.PI / 2;
-  clamp.position.set(x, SCENE_SCALE.funnelPairY - 0.22, SCENE_SCALE.centerEquipmentZ);
+    const neck = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.16, 0.2, 0.46, 36),
+      materials.equipmentDarkSteel
+    );
+    neck.name = `${id}_short_neck`;
+    neck.position.set(x, SCENE_SCALE.funnelPairY - 0.43, SCENE_SCALE.centerEquipmentZ);
 
-  group.add(upperRim, cone, neck, clamp);
+    const clamp = new THREE.Mesh(
+      new THREE.TorusGeometry(0.21, 0.028, 10, 32),
+      materials.equipmentDarkSteel
+    );
+    clamp.name = `${id}_neck_clamp_ring`;
+    clamp.rotation.x = Math.PI / 2;
+    clamp.position.set(x, SCENE_SCALE.funnelPairY - 0.22, SCENE_SCALE.centerEquipmentZ);
+
+    group.add(upperRim, cone, neck, clamp);
+  } else {
+    // Left/right funnel: cone truncated to flat bottom (r=0.16), fuses directly into hard pipe
+    const cone = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.16, 0.54, 0.76, 56, 1, true),
+      materials.equipmentSteel
+    );
+    cone.name = `${id}_stainless_cone`;
+    cone.rotation.x = Math.PI;
+    cone.position.set(x, SCENE_SCALE.funnelPairY + 0.04, SCENE_SCALE.centerEquipmentZ);
+
+    group.add(upperRim, cone);
+  }
 
   setId(group, "center_funnel_pair");
   return group;

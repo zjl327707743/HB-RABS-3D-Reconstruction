@@ -39,15 +39,15 @@ function horizontalPipe(id, name, x, y, z, length, materials) {
 const LOWER_HARD_PIPE_CONFIGS = {
   left: {
     funnelKey: "left",
-    dropY: 2.56,
-    turnX: -1.52,
-    endX: -2.18
+    startY: 3.44,
+    turnX: -1.22,
+    endX: -1.52
   },
   right: {
     funnelKey: "right",
-    dropY: 2.56,
-    turnX: 3.28,
-    endX: 3.94
+    startY: 3.44,
+    turnX: 3.02,
+    endX: 3.32
   }
 };
 
@@ -59,26 +59,24 @@ function createLowerHardPipe(side, materials) {
   const sign = pipeX < config.endX ? 1 : -1;
   const turnX = config.turnX;
   const valveInnerX = config.endX;
-  const neckBottomY = 3.12;
-  const dropY = config.dropY;
+  const startY = config.startY;
   const valveCenterY = s.valvePipeY;
   const neckZ = s.centerEquipmentZ;
   const valveCenterZ = s.valvePipeZ;
   const radius = 0.16;
 
+  // Vertical drop from funnel base, tight 90° elbow, horizontal to valve
   const anchors = {
-    start: new THREE.Vector3(pipeX, neckBottomY, neckZ),
-    drop: new THREE.Vector3(pipeX, dropY, neckZ),
-    elbowControlA: new THREE.Vector3(pipeX, dropY - 0.08, neckZ + 0.02),
-    elbowControlB: new THREE.Vector3(turnX - sign * 0.10, valveCenterY, valveCenterZ - 0.06),
-    horizontalStart: new THREE.Vector3(turnX, valveCenterY, valveCenterZ),
+    start: new THREE.Vector3(pipeX, startY, neckZ),
+    elbowA: new THREE.Vector3(pipeX, startY - 0.16, neckZ + 0.02),
+    elbowB: new THREE.Vector3(turnX, valveCenterY + 0.25, valveCenterZ),
+    valveCenter: new THREE.Vector3(turnX, valveCenterY, valveCenterZ),
     end: new THREE.Vector3(valveInnerX, valveCenterY, valveCenterZ)
   };
 
   const path = new THREE.CurvePath();
-  path.add(new THREE.LineCurve3(anchors.start, anchors.drop));
-  path.add(new THREE.CubicBezierCurve3(anchors.drop, anchors.elbowControlA, anchors.elbowControlB, anchors.horizontalStart));
-  path.add(new THREE.LineCurve3(anchors.horizontalStart, anchors.end));
+  path.add(new THREE.CubicBezierCurve3(anchors.start, anchors.elbowA, anchors.elbowB, anchors.valveCenter));
+  path.add(new THREE.LineCurve3(anchors.valveCenter, anchors.end));
 
   const mesh = new THREE.Mesh(
     new THREE.TubeGeometry(path, 36, radius, 24, false),
@@ -99,11 +97,11 @@ function createLowerHardPipe(side, materials) {
 }
 
 export function createLeftHorizontalPipeBlockout(materials) {
-  return horizontalPipe("left_horizontal_pipe_blockout", "left_horizontal_stainless_pipe", -2.26, SCENE_SCALE.valvePipeY, SCENE_SCALE.valvePipeZ, 0.64, materials);
+  return horizontalPipe("left_horizontal_pipe_blockout", "left_horizontal_stainless_pipe", -1.58, SCENE_SCALE.valvePipeY, SCENE_SCALE.valvePipeZ, 0.48, materials);
 }
 
 export function createRightHorizontalPipeBlockout(materials) {
-  return horizontalPipe("right_horizontal_pipe_blockout", "right_horizontal_stainless_pipe", 4.02, SCENE_SCALE.valvePipeY, SCENE_SCALE.valvePipeZ, 0.64, materials);
+  return horizontalPipe("right_horizontal_pipe_blockout", "right_horizontal_stainless_pipe", 3.38, SCENE_SCALE.valvePipeY, SCENE_SCALE.valvePipeZ, 0.48, materials);
 }
 
 export function createMainTubingBlockout(materials) {
