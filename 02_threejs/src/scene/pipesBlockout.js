@@ -39,14 +39,16 @@ function horizontalPipe(id, name, x, y, z, length, materials) {
 const LOWER_HARD_PIPE_CONFIGS = {
   left: {
     funnelKey: "left",
-    startY: 3.44,
-    turnX: -1.22,
+    startY: 3.40,
+    bendY: 3.05,
+    turnX: -1.24,
     endX: -1.52
   },
   right: {
     funnelKey: "right",
-    startY: 3.44,
-    turnX: 3.02,
+    startY: 3.40,
+    bendY: 3.05,
+    turnX: 3.04,
     endX: 3.32
   }
 };
@@ -60,26 +62,33 @@ function createLowerHardPipe(side, materials) {
   const turnX = config.turnX;
   const valveInnerX = config.endX;
   const startY = config.startY;
+  const bendY = config.bendY;
   const valveCenterY = s.valvePipeY;
   const neckZ = s.centerEquipmentZ;
   const valveCenterZ = s.valvePipeZ;
   const radius = 0.16;
 
-  // Vertical drop from funnel base, tight 90° elbow, horizontal to valve
   const anchors = {
     start: new THREE.Vector3(pipeX, startY, neckZ),
-    elbowA: new THREE.Vector3(pipeX, startY - 0.16, neckZ + 0.02),
-    elbowB: new THREE.Vector3(turnX, valveCenterY + 0.25, valveCenterZ),
-    valveCenter: new THREE.Vector3(turnX, valveCenterY, valveCenterZ),
+    verticalEnd: new THREE.Vector3(pipeX, bendY, neckZ),
+    elbowControlA: new THREE.Vector3(pipeX, valveCenterY, neckZ),
+    elbowControlB: new THREE.Vector3(turnX - sign * 0.13, valveCenterY, valveCenterZ),
+    horizontalStart: new THREE.Vector3(turnX, valveCenterY, valveCenterZ),
     end: new THREE.Vector3(valveInnerX, valveCenterY, valveCenterZ)
   };
 
   const path = new THREE.CurvePath();
-  path.add(new THREE.CubicBezierCurve3(anchors.start, anchors.elbowA, anchors.elbowB, anchors.valveCenter));
-  path.add(new THREE.LineCurve3(anchors.valveCenter, anchors.end));
+  path.add(new THREE.LineCurve3(anchors.start, anchors.verticalEnd));
+  path.add(new THREE.CubicBezierCurve3(
+    anchors.verticalEnd,
+    anchors.elbowControlA,
+    anchors.elbowControlB,
+    anchors.horizontalStart
+  ));
+  path.add(new THREE.LineCurve3(anchors.horizontalStart, anchors.end));
 
   const mesh = new THREE.Mesh(
-    new THREE.TubeGeometry(path, 36, radius, 24, false),
+    new THREE.TubeGeometry(path, 48, radius, 28, false),
     materials.polishedSteel
   );
   mesh.name = id;

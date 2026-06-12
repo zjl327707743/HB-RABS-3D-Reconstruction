@@ -13,7 +13,8 @@ import {
   createCenterVesselLidStack,
   createCenterVesselFlangeRing,
   createCenterVesselClampBlocks,
-  createDynamicProductionFlow
+  createDynamicProductionFlow,
+  createFloatingTweezerGasket
 } from "./scene/centerEquipment.js";
 import { createLeftBlackHandwheel, createRightBlackHandwheel, createRightPipeCouplings } from "./scene/rightEquipment.js";
 import {
@@ -22,7 +23,6 @@ import {
   createMainTubingBlockout
 } from "./scene/pipesBlockout.js";
 import { createTopAssemblyBlockout } from "./scene/topAssembly.js";
-import { createSmallStaticParts } from "./scene/smallParts.js";
 import { createAirflowMistPlanes } from "./scene/airflowMist.js";
 import { createSideLiftDoors } from "./scene/sideLiftDoors.js";
 import { objectRegistry } from "./scene/objectRegistry.js";
@@ -71,13 +71,13 @@ const objects = {
   center_vessel_flange_ring: createCenterVesselFlangeRing(materials),
   center_vessel_clamp_blocks: createCenterVesselClampBlocks(materials),
   dynamic_production_flow: createDynamicProductionFlow(materials),
+  floating_tweezer_gasket: createFloatingTweezerGasket(materials),
   left_horizontal_pipe_blockout: createLeftHorizontalPipeBlockout(materials),
   right_horizontal_pipe_blockout: createRightHorizontalPipeBlockout(materials),
   left_black_handwheel: createLeftBlackHandwheel(materials),
   right_black_handwheel: createRightBlackHandwheel(materials),
   right_pipe_couplings: createRightPipeCouplings(materials),
   main_tubing_blockout: createMainTubingBlockout(materials),
-  small_static_parts: createSmallStaticParts(materials),
   airflow_mist_planes: createAirflowMistPlanes(materials),
   lights_camera: createLights()
 };
@@ -157,8 +157,7 @@ function updateDynamicProductionFlow(elapsedTime) {
     particle.scale.setScalar(breathe);
   });
 
-  animation.liquidSurface.rotation.y = elapsedTime * 0.38;
-  animation.liquidRing.rotation.z = elapsedTime * 0.32;
+  animation.liquidSurface.rotation.y = elapsedTime * 0.24;
 }
 
 function animate() {
