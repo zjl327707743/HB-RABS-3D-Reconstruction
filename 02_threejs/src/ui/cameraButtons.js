@@ -2,9 +2,24 @@ export function createCameraControls({ presets, onPreset, onToggle, initialVisib
   const panel = document.createElement("section");
   panel.className = "control-panel";
 
+  const header = document.createElement("div");
+  header.className = "panel-header";
+
   const title = document.createElement("h1");
   title.textContent = versionTitle;
-  panel.appendChild(title);
+  header.appendChild(title);
+
+  const collapseBtn = document.createElement("button");
+  collapseBtn.type = "button";
+  collapseBtn.className = "panel-collapse-btn";
+  collapseBtn.textContent = "Hide panel";
+  collapseBtn.title = "Hide control panel";
+  header.appendChild(collapseBtn);
+
+  panel.appendChild(header);
+
+  const body = document.createElement("div");
+  body.className = "panel-body";
 
   const cameraGroup = document.createElement("div");
   cameraGroup.className = "button-grid";
@@ -16,7 +31,7 @@ export function createCameraControls({ presets, onPreset, onToggle, initialVisib
     button.addEventListener("click", () => onPreset(key));
     cameraGroup.appendChild(button);
   });
-  panel.appendChild(cameraGroup);
+  body.appendChild(cameraGroup);
 
   const visibility = document.createElement("div");
   visibility.className = "toggle-list";
@@ -36,12 +51,42 @@ export function createCameraControls({ presets, onPreset, onToggle, initialVisib
     row.append(label);
     visibility.appendChild(row);
   });
-  panel.appendChild(visibility);
+  body.appendChild(visibility);
 
   const currentCamera = document.createElement("div");
   currentCamera.className = "current-camera";
   currentCamera.id = "current-camera";
-  panel.appendChild(currentCamera);
+  body.appendChild(currentCamera);
+
+  panel.appendChild(body);
+
+  // Show-button that appears when panel is collapsed
+  const showBtn = document.createElement("button");
+  showBtn.type = "button";
+  showBtn.className = "panel-show-btn";
+  showBtn.textContent = "Show panel";
+  showBtn.title = "Show control panel";
+  showBtn.style.display = "none";
+  document.body.appendChild(showBtn);
+
+  function collapsePanel() {
+    body.style.display = "none";
+    collapseBtn.style.display = "none";
+    title.style.display = "none";
+    panel.classList.add("control-panel--collapsed");
+    showBtn.style.display = "";
+  }
+
+  function expandPanel() {
+    body.style.display = "";
+    collapseBtn.style.display = "";
+    title.style.display = "";
+    panel.classList.remove("control-panel--collapsed");
+    showBtn.style.display = "none";
+  }
+
+  collapseBtn.addEventListener("click", collapsePanel);
+  showBtn.addEventListener("click", expandPanel);
 
   document.body.appendChild(panel);
   return {

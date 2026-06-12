@@ -130,6 +130,26 @@ export function createMaterials() {
       roughness: 0.34,
       transparent: true,
       opacity: 0.78
+    }),
+    sterileBag: new THREE.MeshPhysicalMaterial({
+      color: 0xd4eaf7,
+      transparent: true,
+      opacity: 0.28,
+      roughness: 0.32,
+      metalness: 0,
+      transmission: 0.14,
+      thickness: 0.02,
+      side: THREE.DoubleSide,
+      depthWrite: false
+    }),
+    sterileBagSeal: new THREE.MeshStandardMaterial({
+      color: 0xc0dce8,
+      metalness: 0.05,
+      roughness: 0.45,
+      transparent: true,
+      opacity: 0.42,
+      side: THREE.DoubleSide,
+      depthWrite: false
     })
   };
 }

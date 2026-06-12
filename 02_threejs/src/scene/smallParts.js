@@ -10,6 +10,37 @@ function mark(object, id) {
   });
 }
 
+function markBag(object, id) {
+  object.userData.id = id;
+  object.traverse?.((child) => {
+    child.userData.id = id;
+    child.castShadow = false;
+    child.receiveShadow = true;
+  });
+}
+
+function createSterileBag(bodyDims, sealDims, materials) {
+  const bag = new THREE.Group();
+
+  const body = new THREE.Mesh(
+    new THREE.BoxGeometry(bodyDims.w, bodyDims.h, bodyDims.d, 2, 2, 2),
+    materials.sterileBag
+  );
+  bag.add(body);
+
+  if (sealDims) {
+    const seal = new THREE.Mesh(
+      new THREE.PlaneGeometry(sealDims.w, sealDims.h),
+      materials.sterileBagSeal
+    );
+    seal.position.copy(sealDims.pos);
+    seal.rotation.set(sealDims.rotX ?? 0, sealDims.rotY ?? 0, sealDims.rotZ ?? 0);
+    bag.add(seal);
+  }
+
+  return bag;
+}
+
 export function createSmallStaticParts(materials) {
   const group = new THREE.Group();
   group.name = "small_static_parts";
@@ -105,6 +136,53 @@ export function createSmallStaticParts(materials) {
   wrenchJaw.rotation.set(Math.PI / 2, 0, -0.32);
   mark(wrenchJaw, "static_wrench_blockout");
 
+  // --- Sterile bags ---
+
+  // Clamp sterile bag
+  const clampBag = createSterileBag(
+    { w: 0.88, h: 0.19, d: 0.82 },
+    {
+      w: 0.88, h: 0.12,
+      pos: new THREE.Vector3(-0.22, 0.13, 0.14),
+      rotX: Math.PI * 0.42, rotY: 0, rotZ: 0
+    },
+    materials
+  );
+  clampBag.name = "clamp_sterile_bag";
+  clampBag.position.set(-1.26, y + 0.13, -0.1);
+  clampBag.rotation.set(0, 0.18, 0);
+  markBag(clampBag, "clamp_sterile_bag");
+
+  // Funnel part sterile bag
+  const funnelBag = createSterileBag(
+    { w: 0.74, h: 0.52, d: 0.86 },
+    {
+      w: 0.70, h: 0.14,
+      pos: new THREE.Vector3(-0.06, 0.30, 0.24),
+      rotX: Math.PI * 0.44, rotY: 0, rotZ: 0.08
+    },
+    materials
+  );
+  funnelBag.name = "funnel_part_sterile_bag";
+  funnelBag.position.set(1.68, y + 0.28, -0.92);
+  funnelBag.rotation.set(0, 0.2, 0);
+  markBag(funnelBag, "funnel_part_sterile_bag");
+
+  // Petri dish sterile bag (covers dish + lid together)
+  const petriBag = createSterileBag(
+    { w: 1.44, h: 0.14, d: 1.18 },
+    {
+      w: 1.36, h: 0.11,
+      pos: new THREE.Vector3(-0.08, 0.10, 0.40),
+      rotX: Math.PI * 0.38, rotY: 0, rotZ: 0
+    },
+    materials
+  );
+  petriBag.name = "petri_dish_sterile_bag";
+  petriBag.position.set(3.38, y + 0.09, -1.61);
+  petriBag.rotation.set(0, -0.06, 0);
+  markBag(petriBag, "petri_dish_sterile_bag");
+
   group.add(
     dishBase,
     dishRim,
@@ -120,7 +198,10 @@ export function createSmallStaticParts(materials) {
     clampLock,
     smallStand,
     wrenchHandle,
-    wrenchJaw
+    wrenchJaw,
+    clampBag,
+    funnelBag,
+    petriBag
   );
   return group;
 }

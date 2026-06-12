@@ -31,13 +31,53 @@ canvas {
   border-radius: 8px;
   box-shadow: 0 12px 30px rgba(28, 35, 48, 0.14);
   backdrop-filter: blur(10px);
+  z-index: 100;
+  transition: padding 200ms ease;
+}
+
+.control-panel--collapsed {
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  pointer-events: none;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
 }
 
 .control-panel h1 {
-  margin: 0 0 10px;
+  margin: 0;
   font-size: 17px;
   font-weight: 700;
   letter-spacing: 0;
+}
+
+.panel-collapse-btn {
+  flex-shrink: 0;
+  min-height: 26px;
+  padding: 2px 10px;
+  font-size: 11px;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+  background: #f1f5f9;
+  color: #334155;
+  cursor: pointer;
+}
+
+.panel-collapse-btn:hover {
+  background: #e2e8f0;
+}
+
+.control-panel--collapsed .panel-body,
+.control-panel--collapsed .panel-header {
+  display: none;
 }
 
 .button-grid {
@@ -106,4 +146,26 @@ button.active {
 
 .registry-panel span {
   color: #cbd5e1;
+}
+
+.panel-show-btn {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 101;
+  min-height: 32px;
+  padding: 4px 14px;
+  font-size: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #334155;
+  box-shadow: 0 4px 14px rgba(28, 35, 48, 0.1);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+
+.panel-show-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
 }

@@ -393,7 +393,10 @@ export const objectRegistry = [
       "small_metal_funnel_part",
       "loose_connector_part",
       "left_loose_clamp",
-      "static_wrench_blockout"
+      "static_wrench_blockout",
+      "clamp_sterile_bag",
+      "funnel_part_sterile_bag",
+      "petri_dish_sterile_bag"
     ],
     referenceImages: [
       "01_reference_frames/E_tools_small_parts/E_tools_01_image_补充1-卡箍.png",
@@ -489,6 +492,39 @@ export const objectRegistry = [
       "01_reference_frames/E_tools_small_parts/E_tools_06_airflow_4_2_frame_000008.jpg"
     ],
     notes: "Slightly enlarged simplified static wrench on the far-right workbench stand."
+  },
+  {
+    id: "clamp_sterile_bag",
+    displayName: "clamp sterile bag",
+    category: "small_static_detail",
+    version: "v0.5.1",
+    status: "draft_v0.5.1",
+    referenceImages: [
+      "01_reference_frames/overview/image_补充1-卡箍.png"
+    ],
+    notes: "Transparent sterile bag enclosing the left loose clamp parts; blue-tinted film with seal edge."
+  },
+  {
+    id: "funnel_part_sterile_bag",
+    displayName: "funnel part sterile bag",
+    category: "small_static_detail",
+    version: "v0.5.1",
+    status: "draft_v0.5.1",
+    referenceImages: [
+      "01_reference_frames/overview/image_补充1-卡箍.png"
+    ],
+    notes: "Transparent sterile bag enclosing the small metal funnel part; blue-tinted film with seal edge."
+  },
+  {
+    id: "petri_dish_sterile_bag",
+    displayName: "petri dish sterile bag",
+    category: "small_static_detail",
+    version: "v0.5.1",
+    status: "draft_v0.5.1",
+    referenceImages: [
+      "01_reference_frames/overview/image-补充2-培养皿.png"
+    ],
+    notes: "Transparent sterile bag enclosing the petri dish and lid together; blue-tinted film with seal edge."
   },
   {
     id: "airflow_mist_planes",
