@@ -247,10 +247,11 @@ function createCurvedSoftHosePath() {
   const z = SCENE_SCALE.centerEquipmentZ;
   return new THREE.CatmullRomCurve3([
     new THREE.Vector3(x, SCENE_SCALE.funnelPairY + 0.21, z),
-    new THREE.Vector3(x - 0.10, 3.02, z + 0.18),
-    new THREE.Vector3(x - 0.36, 2.28, z + 0.42),
-    new THREE.Vector3(SCENE_SCALE.centerEquipmentX, SCENE_SCALE.centerVesselY + 0.64, z)
-  ]);
+    new THREE.Vector3(x - 0.10, 3.02, z + 0.08),
+    new THREE.Vector3(x - 0.34, 2.42, z + 0.04),
+    new THREE.Vector3(SCENE_SCALE.centerEquipmentX + 0.04, SCENE_SCALE.centerVesselY + 0.86, z),
+    new THREE.Vector3(SCENE_SCALE.centerEquipmentX, SCENE_SCALE.centerVesselY + 0.28, z)
+  ], false, "centripetal", 0.35);
 }
 
 export function createDynamicProductionFlow(materials) {
@@ -260,14 +261,20 @@ export function createDynamicProductionFlow(materials) {
 
   const hosePath = createCurvedSoftHosePath();
   const hose = new THREE.Mesh(
-    new THREE.TubeGeometry(hosePath, 96, 0.36, 36, false),
+    new THREE.TubeGeometry(hosePath, 96, 0.68, 48, false),
     materials.transparentSoftHose
   );
   hose.name = "middle_funnel_transparent_soft_hose";
   group.add(hose);
 
   [0, 1].forEach((pointIndex) => {
-    const point = hosePath.getPoint(pointIndex);
+    const point = pointIndex === 0
+      ? hosePath.getPoint(0)
+      : new THREE.Vector3(
+          SCENE_SCALE.centerEquipmentX,
+          SCENE_SCALE.centerVesselY + 0.64,
+          SCENE_SCALE.centerEquipmentZ
+        );
     const ringMaterial = pointIndex === 0
       ? new THREE.MeshStandardMaterial({
           color: 0xf1f3f4,
@@ -275,7 +282,7 @@ export function createDynamicProductionFlow(materials) {
           roughness: 0.1
         })
       : materials.polishedSteel;
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.37, 0.026, 12, 64), ringMaterial);
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.69, 0.032, 12, 72), ringMaterial);
     ring.name = pointIndex === 0 ? "soft_hose_upper_clamp_ring" : "soft_hose_bucket_clamp_ring";
     ring.rotation.x = Math.PI / 2;
     ring.position.copy(point);
