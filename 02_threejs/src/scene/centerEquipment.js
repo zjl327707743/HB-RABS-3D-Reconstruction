@@ -125,9 +125,11 @@ export function createCenterVessel(materials) {
   const cy = SCENE_SCALE.centerVesselY;
   const cz = SCENE_SCALE.centerEquipmentZ;
 
+  const bodyMaterial = materials.equipmentSteel.clone();
+  bodyMaterial.side = THREE.DoubleSide;
   const body = new THREE.Mesh(
     new THREE.CylinderGeometry(0.78, 0.86, 1.55, 64, 1, true),
-    materials.equipmentSteel
+    bodyMaterial
   );
   body.name = "open_mixer_bucket_wall";
   body.position.set(cx, cy - 0.12, cz);
@@ -154,9 +156,11 @@ export function createCenterVessel(materials) {
   topRim.rotation.x = Math.PI / 2;
   topRim.position.set(cx, cy + 0.62, cz);
 
+  const topBandMaterial = materials.equipmentSteel.clone();
+  topBandMaterial.side = THREE.DoubleSide;
   const topBand = new THREE.Mesh(
     new THREE.CylinderGeometry(0.84, 0.82, 0.10, 64, 1, true),
-    materials.equipmentSteel
+    topBandMaterial
   );
   topBand.name = "open_mixer_bucket_top_band";
   topBand.position.set(cx, cy + 0.55, cz);
