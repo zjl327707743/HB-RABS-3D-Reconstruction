@@ -122,6 +122,26 @@ button.active {
   margin: 0;
 }
 
+.display-mode-control {
+  display: grid;
+  gap: 7px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #d7dde6;
+  font-size: 12px;
+}
+
+.display-mode-control > span {
+  color: #334155;
+  font-weight: 600;
+}
+
+.display-mode-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
 .current-camera {
   margin-top: 10px;
   padding-top: 9px;

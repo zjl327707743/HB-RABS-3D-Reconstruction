@@ -74,7 +74,7 @@ export function createGlassPanels(materials) {
   const panelHeight = s.chamberHeight - 0.64;
   const glass = new THREE.Mesh(
     new THREE.BoxGeometry(panelWidth, panelHeight, 0.035),
-    materials.glass
+    materials.frontGlass
   );
   glass.name = "front_glass_panel";
   glass.position.set(s.centerX, panelHeight / 2 + 0.08, s.frontGlassZ + 0.012);

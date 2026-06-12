@@ -23,20 +23,7 @@ export function createTopAssemblyBlockout(materials) {
   const group = new THREE.Group();
   group.name = "top_assembly_blockout";
   group.userData.id = "top_assembly_blockout";
-  const s = SCENE_SCALE;
-
-  const block = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.28, 0.5), materials.blackRubber);
-  block.name = "top_black_center_block";
-  block.position.set(s.centerEquipmentX, 4.96, s.centerEquipmentZ + 0.02);
-  block.userData.id = "top_black_center_block";
-
-  group.add(
-    block,
-    horizontalBar("top_left_handle_bar", -1.42, 4.95, s.centerEquipmentZ, 0.9, materials.equipmentDarkSteel, "top_assembly_blockout"),
-    horizontalBar("top_right_handle_bar", 1.42, 4.95, s.centerEquipmentZ, 0.9, materials.equipmentDarkSteel, "top_assembly_blockout")
-  );
 
   mark(group, "top_assembly_blockout");
-  block.userData.id = "top_black_center_block";
   return group;
 }

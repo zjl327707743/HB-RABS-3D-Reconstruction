@@ -45,6 +45,7 @@ function createFunnel(id, x, materials) {
   clamp.position.set(x, SCENE_SCALE.funnelPairY - 0.22, SCENE_SCALE.centerEquipmentZ);
 
   group.add(upperRim, cone, neck, clamp);
+
   setId(group, "center_funnel_pair");
   return group;
 }
@@ -53,8 +54,12 @@ export function createCenterFunnelPair(materials) {
   const group = new THREE.Group();
   group.name = "center_funnel_pair";
   group.userData.id = "center_funnel_pair";
-  group.add(createFunnel("left_funnel_blockout", -0.58, materials));
-  group.add(createFunnel("right_funnel_blockout", 0.58, materials));
+  const xs = SCENE_SCALE.funnelDeviceXs;
+  group.add(
+    createFunnel("left_funnel_blockout", xs.left, materials),
+    createFunnel("middle_funnel_blockout", xs.middle, materials),
+    createFunnel("right_funnel_blockout", xs.right, materials)
+  );
   return group;
 }
 
@@ -63,8 +68,10 @@ export function createUpperInletPipePair(materials) {
   group.name = "upper_inlet_pipe_pair";
   group.userData.id = "upper_inlet_pipe_pair";
 
-  [-0.58, 0.58].forEach((x, index) => {
-    const side = index === 0 ? "left" : "right";
+  [
+    ["left", SCENE_SCALE.funnelDeviceXs.left],
+    ["right", SCENE_SCALE.funnelDeviceXs.right]
+  ].forEach(([side, x]) => {
     const pipe = new THREE.Mesh(
       new THREE.CylinderGeometry(0.5, 0.5, 0.66, 64),
       materials.polishedSteel
@@ -114,22 +121,56 @@ export function createCenterVessel(materials) {
   group.name = "center_vessel";
   group.userData.id = "center_vessel";
 
+  const cx = SCENE_SCALE.centerEquipmentX;
+  const cy = SCENE_SCALE.centerVesselY;
+  const cz = SCENE_SCALE.centerEquipmentZ;
+
   const body = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.78, 0.86, 1.55, 64),
+    new THREE.CylinderGeometry(0.78, 0.86, 1.55, 64, 1, true),
     materials.equipmentSteel
   );
-  body.name = "center_vessel_main_cylinder";
-  body.position.set(SCENE_SCALE.centerEquipmentX, SCENE_SCALE.centerVesselY - 0.12, SCENE_SCALE.centerEquipmentZ);
+  body.name = "open_mixer_bucket_wall";
+  body.position.set(cx, cy - 0.12, cz);
+
+  const bucketFloor = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.78, 0.82, 0.08, 64),
+    materials.equipmentDarkSteel
+  );
+  bucketFloor.name = "open_mixer_bucket_bottom";
+  bucketFloor.position.set(cx, cy - 0.94, cz);
 
   const lowerBand = new THREE.Mesh(
     new THREE.CylinderGeometry(0.88, 0.88, 0.12, 64),
     materials.equipmentDarkSteel
   );
   lowerBand.name = "center_vessel_lower_band";
-  lowerBand.position.set(SCENE_SCALE.centerEquipmentX, SCENE_SCALE.centerVesselY + 0.06, SCENE_SCALE.centerEquipmentZ);
+  lowerBand.position.set(cx, cy + 0.06, cz);
 
-  group.add(body, lowerBand);
+  const topRim = new THREE.Mesh(
+    new THREE.TorusGeometry(0.82, 0.05, 14, 64),
+    materials.polishedSteel
+  );
+  topRim.name = "open_mixer_bucket_top_rim";
+  topRim.rotation.x = Math.PI / 2;
+  topRim.position.set(cx, cy + 0.62, cz);
+
+  const topBand = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.84, 0.82, 0.10, 64, 1, true),
+    materials.equipmentSteel
+  );
+  topBand.name = "open_mixer_bucket_top_band";
+  topBand.position.set(cx, cy + 0.55, cz);
+
+  const innerCatchSpace = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.62, 0.66, 0.34, 64, 1, true),
+    materials.mixerMaterial
+  );
+  innerCatchSpace.name = "open_mixer_bucket_visible_material_space";
+  innerCatchSpace.position.set(cx, cy - 0.36, cz);
+
+  group.add(body, bucketFloor, lowerBand, topRim, topBand, innerCatchSpace);
   setId(group, "center_vessel");
+  innerCatchSpace.userData.id = "center_vessel_material_space";
   return group;
 }
 
@@ -138,13 +179,12 @@ export function createCenterVesselLidStack(materials) {
   group.name = "center_vessel_lid_stack";
   group.userData.id = "center_vessel_lid_stack";
   const x = SCENE_SCALE.centerEquipmentX;
-  const z = SCENE_SCALE.centerEquipmentZ;
-  const y = SCENE_SCALE.centerVesselY + 0.72;
+  const z = 0.62;
+  const y = SCENE_SCALE.tableHeight + 0.12;
 
   [
-    ["center_vessel_lower_lid", 0.95, 0.16, y],
-    ["center_vessel_upper_lid", 0.78, 0.14, y + 0.16],
-    ["center_vessel_center_short_standpipe", 0.16, 0.35, y + 0.39]
+    ["detached_mixer_lower_round_lid", 0.82, 0.08, y],
+    ["detached_mixer_upper_round_lid", 0.66, 0.08, y + 0.08]
   ].forEach(([name, radius, height, py]) => {
     const part = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius, height, 64), materials.polishedSteel);
     part.name = name;
@@ -153,6 +193,87 @@ export function createCenterVesselLidStack(materials) {
   });
 
   setId(group, "center_vessel_lid_stack");
+  return group;
+}
+
+function createCurvedSoftHosePath() {
+  const x = SCENE_SCALE.funnelDeviceXs.middle;
+  const z = SCENE_SCALE.centerEquipmentZ;
+  return new THREE.CatmullRomCurve3([
+    new THREE.Vector3(x, SCENE_SCALE.funnelPairY - 0.66, z),
+    new THREE.Vector3(x - 0.24, 2.58, z + 0.34),
+    new THREE.Vector3(x - 0.56, 2.04, z + 0.48),
+    new THREE.Vector3(SCENE_SCALE.centerEquipmentX, SCENE_SCALE.centerVesselY + 0.64, z)
+  ]);
+}
+
+export function createDynamicProductionFlow(materials) {
+  const group = new THREE.Group();
+  group.name = "dynamic_production_flow";
+  group.userData.id = "dynamic_production_flow";
+
+  const hosePath = createCurvedSoftHosePath();
+  const hose = new THREE.Mesh(
+    new THREE.TubeGeometry(hosePath, 72, 0.11, 24, false),
+    materials.transparentSoftHose
+  );
+  hose.name = "middle_funnel_transparent_soft_hose";
+  group.add(hose);
+
+  [0, 1].forEach((pointIndex) => {
+    const point = hosePath.getPoint(pointIndex);
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.13, 0.018, 10, 32), materials.equipmentDarkSteel);
+    ring.name = pointIndex === 0 ? "soft_hose_upper_clamp_ring" : "soft_hose_bucket_clamp_ring";
+    ring.rotation.x = Math.PI / 2;
+    ring.position.copy(point);
+    group.add(ring);
+  });
+
+  const flowParticles = [];
+  for (let i = 0; i < 22; i += 1) {
+    const size = 0.028 + Math.random() * 0.032;
+    const particle = new THREE.Mesh(new THREE.SphereGeometry(size, 10, 8), materials.flowMaterial);
+    particle.name = `soft_hose_flow_particle_${String(i + 1).padStart(2, "0")}`;
+    group.add(particle);
+    flowParticles.push(particle);
+  }
+
+  const liquidSurface = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.56, 0.60, 0.05, 64),
+    materials.mixerMaterial
+  );
+  liquidSurface.name = "open_mixer_rotating_material_surface";
+  liquidSurface.position.set(
+    SCENE_SCALE.centerEquipmentX,
+    SCENE_SCALE.centerVesselY - 0.14,
+    SCENE_SCALE.centerEquipmentZ
+  );
+  group.add(liquidSurface);
+
+  const liquidRing = new THREE.Mesh(
+    new THREE.TorusGeometry(0.44, 0.008, 6, 56),
+    materials.flowMaterial
+  );
+  liquidRing.name = "open_mixer_subtle_inner_ring";
+  liquidRing.rotation.x = Math.PI / 2;
+  liquidRing.position.set(
+    SCENE_SCALE.centerEquipmentX,
+    SCENE_SCALE.centerVesselY - 0.06,
+    SCENE_SCALE.centerEquipmentZ
+  );
+  group.add(liquidRing);
+
+  setId(group, "dynamic_production_flow");
+
+  const offsets = flowParticles.map(() => Math.random());
+  group.userData.animation = {
+    hosePath,
+    flowParticles,
+    liquidSurface,
+    liquidRing,
+    flowOffsets: offsets
+  };
+
   return group;
 }
 

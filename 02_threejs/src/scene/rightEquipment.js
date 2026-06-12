@@ -27,13 +27,46 @@ function makeHandwheel(id, x, y, z, side, materials) {
   group.name = id;
   group.userData.id = id;
 
+  const inlineValveBody = horizontalCylinder(
+    `${id}_inline_valve_body`,
+    x,
+    y,
+    z,
+    0.34,
+    0.17,
+    materials.equipmentDarkSteel,
+    id
+  );
+
+  const innerConnector = horizontalCylinder(
+    `${id}_inner_metal_connector`,
+    x - side * 0.27,
+    y,
+    z,
+    0.22,
+    0.13,
+    materials.polishedSteel,
+    id
+  );
+
+  const outerConnector = horizontalCylinder(
+    `${id}_outer_metal_connector`,
+    x + side * 0.27,
+    y,
+    z,
+    0.22,
+    0.13,
+    materials.polishedSteel,
+    id
+  );
+
   const wheel = new THREE.Mesh(
     new THREE.CylinderGeometry(0.34, 0.34, 0.16, 48),
     materials.blackControl
   );
   wheel.name = `${id}_black_round_wheel`;
   wheel.rotation.x = Math.PI / 2;
-  wheel.position.set(x, y, z + 0.22);
+  wheel.position.set(x, y, z + 0.33);
 
   const hub = new THREE.Mesh(
     new THREE.CylinderGeometry(0.14, 0.14, 0.24, 32),
@@ -43,18 +76,19 @@ function makeHandwheel(id, x, y, z, side, materials) {
   hub.rotation.x = Math.PI / 2;
   hub.position.copy(wheel.position);
 
-  const stem = horizontalCylinder(
-    `${id}_short_stem_to_pipe`,
-    x + side * 0.22,
+  const stem = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.075, 0.075, 0.4, 28),
+    materials.equipmentDarkSteel
+  );
+  stem.name = `${id}_front_stem_to_inline_body`;
+  stem.rotation.x = Math.PI / 2;
+  stem.position.set(
+    x,
     y,
-    z + 0.1,
-    0.48,
-    0.08,
-    materials.equipmentDarkSteel,
-    id
+    z + 0.17
   );
 
-  group.add(wheel, hub, stem);
+  group.add(inlineValveBody, innerConnector, outerConnector, wheel, hub, stem);
 
   for (let i = 0; i < 6; i += 1) {
     const angle = (Math.PI * 2 * i) / 6;
@@ -63,7 +97,7 @@ function makeHandwheel(id, x, y, z, side, materials) {
     blade.position.set(
       x + Math.cos(angle) * 0.26,
       y + Math.sin(angle) * 0.26,
-      z + 0.31
+      z + 0.42
     );
     blade.rotation.z = angle;
     group.add(blade);
@@ -74,11 +108,11 @@ function makeHandwheel(id, x, y, z, side, materials) {
 }
 
 export function createLeftBlackHandwheel(materials) {
-  return makeHandwheel("left_black_handwheel", -2.45, SCENE_SCALE.valvePipeY, SCENE_SCALE.valvePipeZ, -1, materials);
+  return makeHandwheel("left_black_handwheel", -2.26, SCENE_SCALE.valvePipeY, SCENE_SCALE.valvePipeZ, -1, materials);
 }
 
 export function createRightBlackHandwheel(materials) {
-  return makeHandwheel("right_black_handwheel", 2.45, SCENE_SCALE.valvePipeY, SCENE_SCALE.valvePipeZ, 1, materials);
+  return makeHandwheel("right_black_handwheel", 4.02, SCENE_SCALE.valvePipeY, SCENE_SCALE.valvePipeZ, 1, materials);
 }
 
 export function createRightPipeCouplings(materials) {
@@ -89,7 +123,7 @@ export function createRightPipeCouplings(materials) {
   const y = SCENE_SCALE.valvePipeY;
   const z = SCENE_SCALE.valvePipeZ;
   [
-    ["right_coupling_inner", 1.72]
+    ["right_coupling_inner", 3.94]
   ].forEach(([name, x]) => {
     const ring = horizontalCylinder(name, x, y, z, 0.18, 0.2, materials.equipmentDarkSteel, "right_pipe_couplings");
     group.add(ring);
@@ -107,8 +141,8 @@ export function createLeftPipeCouplings(materials) {
   const y = SCENE_SCALE.valvePipeY;
   const z = SCENE_SCALE.valvePipeZ;
   [
-    ["left_coupling_inner", -1.68],
-    ["left_coupling_outer", -3.28]
+    ["left_coupling_inner", -2.18],
+    ["left_coupling_outer", -2.64]
   ].forEach(([name, x]) => {
     const ring = horizontalCylinder(name, x, y, z, 0.18, 0.2, materials.equipmentDarkSteel, "left_horizontal_pipe_blockout");
     group.add(ring);

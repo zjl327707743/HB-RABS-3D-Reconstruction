@@ -22,6 +22,17 @@ export function createMaterials() {
       thickness: 0.06,
       side: THREE.DoubleSide
     }),
+    frontGlass: new THREE.MeshPhysicalMaterial({
+      color: 0xe8f6fb,
+      transparent: true,
+      opacity: 0.18,
+      roughness: 0.06,
+      metalness: 0,
+      transmission: 0.28,
+      thickness: 0.04,
+      side: THREE.DoubleSide,
+      depthWrite: false
+    }),
     rearWall: new THREE.MeshStandardMaterial({
       color: 0xaeb5ba,
       metalness: 0.66,
@@ -67,6 +78,37 @@ export function createMaterials() {
       color: 0xd4d8dc,
       metalness: 0.94,
       roughness: 0.18
+    }),
+    transparentSoftHose: new THREE.MeshPhysicalMaterial({
+      color: 0xd8f2f4,
+      transparent: true,
+      opacity: 0.44,
+      roughness: 0.18,
+      metalness: 0,
+      transmission: 0.16,
+      thickness: 0.04,
+      depthWrite: false,
+      side: THREE.DoubleSide
+    }),
+    flowMaterial: new THREE.MeshStandardMaterial({
+      color: 0xf4f0c6,
+      transparent: true,
+      opacity: 0.72,
+      roughness: 0.38,
+      metalness: 0.02,
+      emissive: 0x26220a,
+      emissiveIntensity: 0.08,
+      depthWrite: false
+    }),
+    mixerMaterial: new THREE.MeshPhysicalMaterial({
+      color: 0xe7d99d,
+      transparent: true,
+      opacity: 0.46,
+      roughness: 0.24,
+      metalness: 0.02,
+      transmission: 0.06,
+      thickness: 0.03,
+      depthWrite: false
     }),
     blackControl: new THREE.MeshStandardMaterial({
       color: 0x0f1115,

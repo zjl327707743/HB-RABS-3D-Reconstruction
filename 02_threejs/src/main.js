@@ -12,7 +12,8 @@ import {
   createCenterVessel,
   createCenterVesselLidStack,
   createCenterVesselFlangeRing,
-  createCenterVesselClampBlocks
+  createCenterVesselClampBlocks,
+  createDynamicProductionFlow
 } from "./scene/centerEquipment.js";
 import { createLeftBlackHandwheel, createRightBlackHandwheel, createRightPipeCouplings } from "./scene/rightEquipment.js";
 import {
@@ -33,7 +34,7 @@ import "./styles.css";
 const app = document.querySelector("#app");
 
 const scene = new THREE.Scene();
-scene.name = "hb-rabs-v0-5-final-visual-draft";
+scene.name = "hb-rabs-v0-6-dynamic-production-demo";
 scene.background = new THREE.Color(0xf4f6f8);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
@@ -69,6 +70,7 @@ const objects = {
   center_vessel_lid_stack: createCenterVesselLidStack(materials),
   center_vessel_flange_ring: createCenterVesselFlangeRing(materials),
   center_vessel_clamp_blocks: createCenterVesselClampBlocks(materials),
+  dynamic_production_flow: createDynamicProductionFlow(materials),
   left_horizontal_pipe_blockout: createLeftHorizontalPipeBlockout(materials),
   right_horizontal_pipe_blockout: createRightHorizontalPipeBlockout(materials),
   left_black_handwheel: createLeftBlackHandwheel(materials),
@@ -99,12 +101,20 @@ document.body.appendChild(registryPanel);
 const ui = createCameraControls({
   presets: CAMERA_PRESETS,
   initialVisibility: Object.fromEntries(Object.keys(objects).map((key) => [key, true])),
-  versionTitle: "HB-RABS v0.5",
+  initialDisplayMode: "dynamic",
+  versionTitle: "HB-RABS v0.6",
   onPreset: applyCameraPreset,
   onToggle: (id, visible) => {
     if (objects[id]) objects[id].visible = visible;
+  },
+  onDisplayMode: (mode) => {
+    applyDisplayMode(mode);
   }
 });
+
+let displayMode = "dynamic";
+const clock = new THREE.Clock();
+applyDisplayMode(displayMode);
 
 function applyCameraPreset(name) {
   const preset = CAMERA_PRESETS[name];
@@ -125,8 +135,38 @@ function resize() {
 
 window.addEventListener("resize", resize);
 
+function applyDisplayMode(mode) {
+  displayMode = mode;
+  const frontGlass = scene.getObjectByName("front_glass_panel");
+  if (frontGlass?.material) {
+    frontGlass.material.opacity = mode === "dynamic" ? 0.12 : 0.22;
+    frontGlass.material.depthWrite = false;
+    frontGlass.material.needsUpdate = true;
+  }
+}
+
+function updateDynamicProductionFlow(elapsedTime) {
+  const animation = objects.dynamic_production_flow.userData.animation;
+  if (!animation) return;
+
+  animation.flowParticles.forEach((particle, index) => {
+    const offset = animation.flowOffsets[index];
+    const t = ((elapsedTime * 0.14 + offset) % 1 + 1) % 1;
+    particle.position.copy(animation.hosePath.getPointAt(t));
+    const breathe = 0.88 + Math.sin(elapsedTime * 1.8 + index * 0.7) * 0.10;
+    particle.scale.setScalar(breathe);
+  });
+
+  animation.liquidSurface.rotation.y = elapsedTime * 0.38;
+  animation.liquidRing.rotation.z = elapsedTime * 0.32;
+}
+
 function animate() {
+  const elapsedTime = clock.getElapsedTime();
   controls.update();
+  if (displayMode === "dynamic") {
+    updateDynamicProductionFlow(elapsedTime);
+  }
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
 }
@@ -141,5 +181,11 @@ window.__HB_RABS_APP__ = {
   objects,
   objectRegistry,
   applyCameraPreset,
-  cameraPresets: CAMERA_PRESETS
+  cameraPresets: CAMERA_PRESETS,
+  get displayMode() {
+    return displayMode;
+  },
+  setDisplayMode(mode) {
+    applyDisplayMode(mode);
+  }
 };

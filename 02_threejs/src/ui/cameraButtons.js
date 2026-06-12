@@ -1,4 +1,12 @@
-export function createCameraControls({ presets, onPreset, onToggle, initialVisibility, versionTitle = "HB-RABS v0.2" }) {
+export function createCameraControls({
+  presets,
+  onPreset,
+  onToggle,
+  onDisplayMode,
+  initialVisibility,
+  initialDisplayMode = "dynamic",
+  versionTitle = "HB-RABS v0.2"
+}) {
   const panel = document.createElement("section");
   panel.className = "control-panel";
 
@@ -52,6 +60,37 @@ export function createCameraControls({ presets, onPreset, onToggle, initialVisib
     visibility.appendChild(row);
   });
   body.appendChild(visibility);
+
+  const displayModeGroup = document.createElement("div");
+  displayModeGroup.className = "display-mode-control";
+
+  const displayModeLabel = document.createElement("span");
+  displayModeLabel.textContent = "展示模式";
+  displayModeGroup.appendChild(displayModeLabel);
+
+  const displayModeButtons = document.createElement("div");
+  displayModeButtons.className = "display-mode-buttons";
+
+  [
+    ["static", "静态结构"],
+    ["dynamic", "动态演示"]
+  ].forEach(([mode, label]) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.dataset.displayMode = mode;
+    button.textContent = label;
+    button.classList.toggle("active", mode === initialDisplayMode);
+    button.addEventListener("click", () => {
+      onDisplayMode?.(mode);
+      displayModeButtons.querySelectorAll("[data-display-mode]").forEach((candidate) => {
+        candidate.classList.toggle("active", candidate.dataset.displayMode === mode);
+      });
+    });
+    displayModeButtons.appendChild(button);
+  });
+
+  displayModeGroup.appendChild(displayModeButtons);
+  body.appendChild(displayModeGroup);
 
   const currentCamera = document.createElement("div");
   currentCamera.className = "current-camera";

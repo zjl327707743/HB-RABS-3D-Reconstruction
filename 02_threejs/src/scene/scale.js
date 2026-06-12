@@ -21,9 +21,14 @@ export const SCENE_SCALE = {
   glovePortSleeveDepth: 0.3,
   centerEquipmentX: 0,
   centerEquipmentZ: -0.85,
-  centerVesselY: 1.25,
+  centerVesselY: 0.98,
   funnelPairY: 3.75,
-  valvePipeY: 2.08,
+  funnelDeviceXs: {
+    left: -1.10,
+    middle: 0.70,
+    right: 2.85
+  },
+  valvePipeY: 2.42,
   valvePipeZ: -0.78,
   centerVesselAvoidRadius: 0.95,
   centerVesselPipeClearance: 0.28,
@@ -31,4 +36,4 @@ export const SCENE_SCALE = {
   rightEquipmentZ: -0.45
 };
 
-export const VERSION_LABEL = "v0.5 final visual draft";
+export const VERSION_LABEL = "v0.6 dynamic production demo";

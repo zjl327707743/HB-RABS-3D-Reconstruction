@@ -36,17 +36,31 @@ function horizontalPipe(id, name, x, y, z, length, materials) {
   return group;
 }
 
+const LOWER_HARD_PIPE_CONFIGS = {
+  left: {
+    funnelKey: "left",
+    dropY: 2.56,
+    turnX: -1.52,
+    endX: -2.18
+  },
+  right: {
+    funnelKey: "right",
+    dropY: 2.56,
+    turnX: 3.28,
+    endX: 3.94
+  }
+};
+
 function createLowerHardPipe(side, materials) {
+  const config = LOWER_HARD_PIPE_CONFIGS[side];
   const id = `funnel_lower_hard_pipe_${side}`;
   const s = SCENE_SCALE;
-  const sign = side === "left" ? -1 : 1;
-  const pipeX = sign * 0.58;
-  const vesselRadius = s.centerVesselAvoidRadius;
-  const clearance = s.centerVesselPipeClearance;
-  const turnX = sign * (vesselRadius + clearance + 0.05);
-  const valveInnerX = sign * 1.48;
+  const pipeX = s.funnelDeviceXs[config.funnelKey];
+  const sign = pipeX < config.endX ? 1 : -1;
+  const turnX = config.turnX;
+  const valveInnerX = config.endX;
   const neckBottomY = 3.12;
-  const dropY = 2.74;
+  const dropY = config.dropY;
   const valveCenterY = s.valvePipeY;
   const neckZ = s.centerEquipmentZ;
   const valveCenterZ = s.valvePipeZ;
@@ -55,8 +69,8 @@ function createLowerHardPipe(side, materials) {
   const anchors = {
     start: new THREE.Vector3(pipeX, neckBottomY, neckZ),
     drop: new THREE.Vector3(pipeX, dropY, neckZ),
-    elbowControlA: new THREE.Vector3(pipeX, dropY - 0.22, neckZ),
-    elbowControlB: new THREE.Vector3(turnX - sign * 0.2, valveCenterY, valveCenterZ),
+    elbowControlA: new THREE.Vector3(pipeX, dropY - 0.08, neckZ + 0.02),
+    elbowControlB: new THREE.Vector3(turnX - sign * 0.10, valveCenterY, valveCenterZ - 0.06),
     horizontalStart: new THREE.Vector3(turnX, valveCenterY, valveCenterZ),
     end: new THREE.Vector3(valveInnerX, valveCenterY, valveCenterZ)
   };
@@ -76,8 +90,8 @@ function createLowerHardPipe(side, materials) {
     Object.entries(anchors).map(([key, value]) => [key, value.toArray()])
   );
   mesh.userData.vesselAvoidance = {
-    vesselRadius,
-    clearance,
+    vesselRadius: s.centerVesselAvoidRadius,
+    clearance: s.centerVesselPipeClearance,
     frontOffsetZ: Math.abs(valveCenterZ - neckZ),
     minAbsXAfterTurn: Math.abs(turnX)
   };
@@ -85,11 +99,11 @@ function createLowerHardPipe(side, materials) {
 }
 
 export function createLeftHorizontalPipeBlockout(materials) {
-  return horizontalPipe("left_horizontal_pipe_blockout", "left_horizontal_stainless_pipe", -2.12, SCENE_SCALE.valvePipeY, SCENE_SCALE.valvePipeZ, 1.25, materials);
+  return horizontalPipe("left_horizontal_pipe_blockout", "left_horizontal_stainless_pipe", -2.26, SCENE_SCALE.valvePipeY, SCENE_SCALE.valvePipeZ, 0.64, materials);
 }
 
 export function createRightHorizontalPipeBlockout(materials) {
-  return horizontalPipe("right_horizontal_pipe_blockout", "right_horizontal_stainless_pipe", 2.12, SCENE_SCALE.valvePipeY, SCENE_SCALE.valvePipeZ, 1.25, materials);
+  return horizontalPipe("right_horizontal_pipe_blockout", "right_horizontal_stainless_pipe", 4.02, SCENE_SCALE.valvePipeY, SCENE_SCALE.valvePipeZ, 0.64, materials);
 }
 
 export function createMainTubingBlockout(materials) {
