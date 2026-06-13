@@ -86,6 +86,44 @@ canvas {
   gap: 7px;
 }
 
+.page-nav-control {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #d7dde6;
+  font-size: 12px;
+}
+
+.page-nav-control > span {
+  color: #334155;
+  font-weight: 600;
+}
+
+.page-nav-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.page-nav-buttons a {
+  display: grid;
+  min-height: 32px;
+  place-items: center;
+  border: 1px solid #bcc5d1;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #172033;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.page-nav-buttons a.active {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #ffffff;
+}
+
 button {
   min-height: 32px;
   border: 1px solid #bcc5d1;

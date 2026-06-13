@@ -97,12 +97,13 @@
 | `small_tools` | 小型工具 | 小零件 | 操作工具、手持器具 | planned | P3 |
 | `gaskets` | 垫片 | 小零件 | 已补充漂浮白色极薄圆片垫片，外径保持、内孔放大、环带变窄 | draft_v0.5.2 | P3 |
 | `floating_tweezer_gasket` | 镊子与白色垫片透明包装 | 小零件 | 白色薄片垫片和镊子分别置于各自完整透明无菌包装内 | draft_v0.5.2 | P3 |
-| `small_static_parts` | 静态小件组 | 小零件 | 静态垫片、培养皿/盖、蓝色无菌垫、金属零件、卡箍、扳手 | final_draft_v0.5 | P3 |
+| `table-items` | 桌面物品展示组 | 小零件 | 独立桌面物品页使用：卡箍、培养皿、小金属漏斗+小头90度弯管、松散接头、扳手 | draft_v0.6 | P3 |
+| `small_static_parts` | 静态小件组 | 小零件 | 历史静态小件组，已作为 `table-items` 的来源继续复用 | final_draft_v0.5 | P3 |
 | `static_pad_disc` | 静态白色垫片 | 小零件 | v0.5 因出现在左侧卡箍前方而删除/隐藏 | removed_or_hidden_v0.5 | P3 |
 | `static_dish` | 静态培养皿 | 小零件 | 右后打孔区静态培养皿/浅圆盘，含淡黄色内容物 | final_draft_v0.5 | P3 |
 | `static_dish_lid` | 静态培养皿盖 | 小零件 | 右后打孔区透明浅圆环/透明盖子 | final_draft_v0.5 | P3 |
 | `blue_sterile_wrap` | 蓝色无菌垫 | 小零件 | 主罐体右侧、培养皿左侧的浅蓝半透明折叠薄片 | final_draft_v0.5 | P3 |
-| `small_metal_funnel_part` | 小金属漏斗零件 | 小零件 | 蓝色无菌垫上的躺放/倾斜金属漏斗形零件 | final_draft_v0.5 | P3 |
+| `small_metal_funnel_part` | 小金属漏斗零件 | 小零件 | 平放小金属漏斗，小头连接90度弯管，置于透明无菌包装内 | draft_v0.6 | P3 |
 | `loose_connector_part` | 松散接头零件 | 小零件 | 蓝色无菌垫附近的小型金属连接环 | final_draft_v0.5 | P3 |
 | `left_loose_clamp` | 左侧松散卡箍 | 小零件 | 主罐体左侧下部/法兰附近的金属卡箍 | final_draft_v0.5 | P3 |
 | `static_wrench_blockout` | 静态扳手 | 小零件 | 右侧工作台小台上的放大版简化扳手 | final_draft_v0.5 | P3 |
