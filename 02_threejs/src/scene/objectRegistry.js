@@ -381,6 +381,31 @@ export const objectRegistry = [
     notes: "Enhanced visible perforation marks focused on the middle/rear and right-side tabletop detail area."
   },
   {
+    id: "table-items",
+    displayName: "table items showcase group",
+    category: "small_static_detail",
+    version: "v0.6",
+    status: "draft_v0.6",
+    childObjects: [
+      "left_loose_clamp",
+      "static_dish",
+      "static_dish_lid",
+      "small_metal_funnel_part",
+      "small_metal_funnel_part_90_degree_elbow",
+      "loose_connector_part",
+      "static_wrench_blockout",
+      "clamp_sterile_bag",
+      "funnel_part_sterile_bag",
+      "petri_dish_sterile_bag"
+    ],
+    referenceImages: [
+      "01_reference_frames/E_tools_small_parts/E_tools_01_image_补充1-卡箍.png",
+      "01_reference_frames/E_tools_small_parts/E_tools_02_image-补充2-培养皿.png",
+      "01_reference_frames/E_tools_small_parts/E_tools_05_original_frame_000009.jpg"
+    ],
+    notes: "Dedicated table-items page group restored from commits 1b9b689 and bbcce55; excludes process equipment and keeps only tabletop objects with required sterile bags."
+  },
+  {
     id: "small_static_parts",
     displayName: "small static parts set",
     category: "small_static_detail",
@@ -390,6 +415,7 @@ export const objectRegistry = [
       "static_dish",
       "static_dish_lid",
       "small_metal_funnel_part",
+      "small_metal_funnel_part_90_degree_elbow",
       "loose_connector_part",
       "left_loose_clamp",
       "static_wrench_blockout",
@@ -401,7 +427,7 @@ export const objectRegistry = [
       "01_reference_frames/E_tools_small_parts/E_tools_01_image_补充1-卡箍.png",
       "01_reference_frames/E_tools_small_parts/E_tools_02_image-补充2-培养皿.png"
     ],
-    notes: "Static tabletop detail set refined in v0.5; blue support sheet under the funnel part is hidden, and small parts use simple transparent sterile bags."
+    notes: "Static tabletop detail set restored for the table-items page from v0.5 history; blue support sheet remains hidden, and clamp, petri dish, and flat metal funnel with 90-degree elbow use complete transparent sterile bags."
   },
   {
     id: "static_pad_disc",
@@ -457,7 +483,7 @@ export const objectRegistry = [
     referenceImages: [
       "01_reference_frames/overview/image_补充1-卡箍.png"
     ],
-    notes: "Small tilted metal funnel/cup part resting on the blue sterile wrap."
+    notes: "Small flat metal funnel/cup part; table-items page adds a small-head 90-degree elbow pipe and a complete transparent sterile bag."
   },
   {
     id: "loose_connector_part",

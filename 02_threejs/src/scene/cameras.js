@@ -28,6 +28,29 @@ export const CAMERA_PRESETS = {
   }
 };
 
+export const TABLE_ITEMS_CAMERA_PRESETS = {
+  camera_table_items_front: {
+    label: "camera_table_items_front",
+    position: new THREE.Vector3(1.15, 5.15, 6.45),
+    target: new THREE.Vector3(1.18, 0.18, -0.72)
+  },
+  camera_table_items_oblique: {
+    label: "camera_table_items_oblique",
+    position: new THREE.Vector3(5.1, 3.0, 5.65),
+    target: new THREE.Vector3(1.15, 0.42, -0.58)
+  },
+  camera_table_items_top: {
+    label: "camera_table_items_top",
+    position: new THREE.Vector3(1.1, 8.2, 1.15),
+    target: new THREE.Vector3(1.1, 0.16, -0.62)
+  },
+  camera_table_items_left_detail: {
+    label: "camera_table_items_left_detail",
+    position: new THREE.Vector3(-3.2, 1.85, 4.6),
+    target: new THREE.Vector3(-0.7, 0.36, -0.18)
+  }
+};
+
 export function createCamera(aspect) {
   const camera = new THREE.PerspectiveCamera(42, aspect, 0.1, 120);
   const preset = CAMERA_PRESETS.camera_overall_front;

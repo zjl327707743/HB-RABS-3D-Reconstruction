@@ -37,6 +37,43 @@ function createRoundedRectShape(width, depth, radius) {
   return shape;
 }
 
+function createRoundedRectPath(width, depth, radius) {
+  const x = width / 2;
+  const z = depth / 2;
+  const r = Math.min(radius, x, z);
+  const path = new THREE.Path();
+
+  path.moveTo(-x + r, -z);
+  path.quadraticCurveTo(-x, -z, -x, -z + r);
+  path.lineTo(-x, z - r);
+  path.quadraticCurveTo(-x, z, -x + r, z);
+  path.lineTo(x - r, z);
+  path.quadraticCurveTo(x, z, x, z - r);
+  path.lineTo(x, -z + r);
+  path.quadraticCurveTo(x, -z, x - r, -z);
+  path.lineTo(-x + r, -z);
+  return path;
+}
+
+function createRoundedRectSideShell(width, depth, height, radius, thickness) {
+  const outer = createRoundedRectShape(width, depth, radius);
+  outer.holes.push(
+    createRoundedRectPath(
+      width - thickness * 2,
+      depth - thickness * 2,
+      Math.max(0.02, radius - thickness)
+    )
+  );
+
+  const geometry = new THREE.ExtrudeGeometry(outer, {
+    depth: height,
+    bevelEnabled: false,
+    curveSegments: 20
+  });
+  geometry.computeVertexNormals();
+  return geometry;
+}
+
 function createSterileBag(dims, materials) {
   const bag = new THREE.Group();
   const shape = createRoundedRectShape(dims.w, dims.d, dims.r ?? 0.12);
@@ -63,6 +100,16 @@ function createSterileBag(dims, materials) {
   top.position.y = 0.025;
   bag.add(top);
 
+  const sideHeight = (dims.h ?? 0.22) * 0.72 + 0.055;
+  const sideShell = new THREE.Mesh(
+    createRoundedRectSideShell(dims.w, dims.d, sideHeight, dims.r ?? 0.12, dims.sideThickness ?? 0.038),
+    materials.sterileBag
+  );
+  sideShell.name = "sterile_bag_continuous_side_wall";
+  sideShell.rotation.x = -Math.PI / 2;
+  sideShell.position.y = -0.02;
+  bag.add(sideShell);
+
   if (dims.crease) {
     const crease = new THREE.Mesh(
       new THREE.PlaneGeometry(dims.w * 0.72, 0.018),
@@ -76,10 +123,10 @@ function createSterileBag(dims, materials) {
   return bag;
 }
 
-export function createSmallStaticParts(materials) {
+export function createTableItems(materials) {
   const group = new THREE.Group();
-  group.name = "small_static_parts";
-  group.userData.id = "small_static_parts";
+  group.name = "table-items";
+  group.userData.id = "table-items";
   const y = SCENE_SCALE.tableHeight + 0.08;
 
   const dishX = 3.22;
@@ -124,6 +171,19 @@ export function createSmallStaticParts(materials) {
   funnelNeck.position.set(1.92, y + 0.32, -1.04);
   mark(funnelNeck, "small_metal_funnel_part");
 
+  const elbowPath = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(1.92, y + 0.32, -1.18),
+    new THREE.Vector3(2.04, y + 0.32, -1.28),
+    new THREE.Vector3(2.18, y + 0.32, -1.28),
+    new THREE.Vector3(2.28, y + 0.32, -1.12)
+  ], false, "centripetal", 0.4);
+  const funnelElbow = new THREE.Mesh(
+    new THREE.TubeGeometry(elbowPath, 24, 0.065, 18, false),
+    materials.equipmentDarkSteel
+  );
+  funnelElbow.name = "small_metal_funnel_part_90_degree_elbow";
+  mark(funnelElbow, "small_metal_funnel_part");
+
   const looseConnector = new THREE.Mesh(new THREE.TorusGeometry(0.16, 0.035, 10, 32), materials.equipmentDarkSteel);
   looseConnector.name = "loose_connector_part";
   looseConnector.rotation.set(Math.PI / 2, 0.05, 0.35);
@@ -163,7 +223,7 @@ export function createSmallStaticParts(materials) {
 
   // Clamp sterile bag
   const clampBag = createSterileBag(
-    { w: 1.16, h: 0.34, d: 1.02, r: 0.16, crease: true, creaseRot: 0.12 },
+    { w: 1.16, h: 0.34, d: 1.02, r: 0.16 },
     materials
   );
   clampBag.name = "clamp_sterile_bag";
@@ -173,17 +233,17 @@ export function createSmallStaticParts(materials) {
 
   // Funnel part sterile bag
   const funnelBag = createSterileBag(
-    { w: 1.36, h: 1.42, d: 1.28, r: 0.18, crease: true, creaseRot: -0.22 },
+    { w: 1.68, h: 0.46, d: 1.5, r: 0.18 },
     materials
   );
-  funnelBag.name = "funnel_part_sterile_bag";
-  funnelBag.position.set(1.67, y - 0.005, -0.84);
-  funnelBag.rotation.set(0, 0.2, 0);
+  funnelBag.name = "funnel_elbow_part_sterile_bag";
+  funnelBag.position.set(1.78, y - 0.005, -0.98);
+  funnelBag.rotation.set(0, 0.22, 0);
   markBag(funnelBag, "funnel_part_sterile_bag");
 
   // Petri dish sterile bag (covers dish + lid together)
   const petriBag = createSterileBag(
-    { w: 1.84, h: 0.3, d: 1.28, r: 0.18, crease: true, creaseRot: -0.08 },
+    { w: 1.84, h: 0.3, d: 1.28, r: 0.18 },
     materials
   );
   petriBag.name = "petri_dish_sterile_bag";
@@ -199,6 +259,7 @@ export function createSmallStaticParts(materials) {
     funnelTool,
     funnelRim,
     funnelNeck,
+    funnelElbow,
     looseConnector,
     clampArc,
     clampLock,
@@ -209,5 +270,12 @@ export function createSmallStaticParts(materials) {
     funnelBag,
     petriBag
   );
+  return group;
+}
+
+export function createSmallStaticParts(materials) {
+  const group = createTableItems(materials);
+  group.name = "small_static_parts";
+  group.userData.id = "small_static_parts";
   return group;
 }

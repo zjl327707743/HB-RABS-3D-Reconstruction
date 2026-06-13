@@ -2,7 +2,7 @@ import { createRabsSceneApp } from "./app/rabsSceneApp.js";
 import "./styles.css";
 
 window.__HB_RABS_APP__ = createRabsSceneApp({
-  page: "dynamic",
-  versionTitle: "HB-RABS v0.6",
-  initialDisplayMode: "dynamic"
+  page: "tableItems",
+  versionTitle: "HB-RABS 桌面物品版",
+  initialDisplayMode: "static"
 });
