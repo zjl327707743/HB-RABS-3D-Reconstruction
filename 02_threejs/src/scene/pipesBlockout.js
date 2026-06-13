@@ -105,6 +105,23 @@ function createLowerHardPipe(side, materials) {
   return mesh;
 }
 
+function createLowerFunnelConnectorSleeve(side, materials) {
+  const config = LOWER_HARD_PIPE_CONFIGS[side];
+  const id = `funnel_lower_hard_pipe_${side}`;
+  const s = SCENE_SCALE;
+  const x = s.funnelDeviceXs[config.funnelKey];
+  const y = config.startY + 0.08;
+
+  const sleeve = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.19, 0.17, 0.24, 40),
+    materials.polishedSteel
+  );
+  sleeve.name = `${id}_upper_connector_sleeve`;
+  sleeve.position.set(x, y, s.centerEquipmentZ);
+  setId(sleeve, id);
+  return sleeve;
+}
+
 export function createLeftHorizontalPipeBlockout(materials) {
   return horizontalPipe("left_horizontal_pipe_blockout", "left_horizontal_stainless_pipe", -1.58, SCENE_SCALE.valvePipeY, SCENE_SCALE.valvePipeZ, 0.48, materials);
 }
@@ -119,6 +136,8 @@ export function createMainTubingBlockout(materials) {
   group.userData.id = "main_tubing_blockout";
   group.add(createLowerHardPipe("left", materials));
   group.add(createLowerHardPipe("right", materials));
+  group.add(createLowerFunnelConnectorSleeve("left", materials));
+  group.add(createLowerFunnelConnectorSleeve("right", materials));
 
   return group;
 }

@@ -526,6 +526,24 @@ export const objectRegistry = [
     notes: "Simple transparent soft sterile bag enclosing the petri dish and lid together; dish group shifted slightly right."
   },
   {
+    id: "floating_tweezer_gasket",
+    displayName: "floating tweezer and flat gasket package",
+    category: "small_static_detail",
+    version: "v0.5.2",
+    status: "draft_v0.5.2",
+    childObjects: [
+      "floating_white_flat_washer_gasket",
+      "floating_tweezer_upper_arm",
+      "floating_tweezer_lower_arm",
+      "floating_gasket_sterile_bag",
+      "floating_tweezer_sterile_bag"
+    ],
+    referenceImages: [
+      "01_reference_frames/E_tools_small_parts/E_tools_05_original_frame_000009.jpg"
+    ],
+    notes: "White gasket is modeled as a near-zero-thickness flat washer sheet with a larger inner opening and narrower ring band; tweezers and gasket are enclosed in separate complete transparent sterile packages."
+  },
+  {
     id: "airflow_mist_planes",
     displayName: "airflow mist planes",
     category: "atmosphere_detail",

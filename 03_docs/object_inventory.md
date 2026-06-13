@@ -83,19 +83,20 @@
 | ID | 名称 | 区域 | 描述 | 状态 | 优先级 |
 |----|------|------|------|------|--------|
 | `main_tubing_blockout` | 主要管路占位 | 管路 | 现在包含左右两根漏斗下方不锈钢硬弯管 | draft_v0.5.x | P2 |
-| `funnel_lower_hard_pipe_left` | 左漏斗下方硬管 | 管路 | 连续一体 TubeGeometry：缩短竖直段、小半径圆滑 90° 左拐、短水平段接入左阀门 | draft_v0.5.x | P2 |
-| `funnel_lower_hard_pipe_right` | 右漏斗下方硬管 | 管路 | 连续一体 TubeGeometry：缩短竖直段、小半径圆滑 90° 右拐、短水平段接入右阀门 | draft_v0.5.x | P2 |
+| `funnel_lower_hard_pipe_left` | 左漏斗下方硬管 | 管路 | 连续一体 TubeGeometry，漏斗底部已加短金属连接套筒覆盖缝隙 | draft_v0.5.x | P2 |
+| `funnel_lower_hard_pipe_right` | 右漏斗下方硬管 | 管路 | 连续一体 TubeGeometry，漏斗底部已加短金属连接套筒覆盖缝隙 | draft_v0.5.x | P2 |
 | `left_white_hose_blockout` | 左侧白色软管 | 管路 | 左阀门外侧延伸白管已删除/停用，不再显示 | deprecated_no_display | P2 |
 | `right_white_hose_blockout` | 右侧白色软管 | 管路 | 右阀门外侧延伸白管已删除/停用，不再显示 | deprecated_no_display | P2 |
 | `tubing_system` | 管路系统 | 管路 | 各类管路、管道 | planned | P2 |
-| `clamps_flanges` | 法兰卡箍 | 连接件 | 法兰连接、卡箍固定件 | planned | P2 |
+| `clamps_flanges` | 法兰卡箍 | 连接件 | 已补充中间金属漏斗下方连接口卡箍环/扣块，以及软管下端入罐连接卡箍；其它法兰卡箍继续细化 | draft_v0.5.2 | P2 |
 
 ### 小零件与工具
 
 | ID | 名称 | 区域 | 描述 | 状态 | 优先级 |
 |----|------|------|------|------|--------|
 | `small_tools` | 小型工具 | 小零件 | 操作工具、手持器具 | planned | P3 |
-| `gaskets` | 垫片 | 小零件 | 密封垫片、O 型圈 | planned | P3 |
+| `gaskets` | 垫片 | 小零件 | 已补充漂浮白色极薄圆片垫片，外径保持、内孔放大、环带变窄 | draft_v0.5.2 | P3 |
+| `floating_tweezer_gasket` | 镊子与白色垫片透明包装 | 小零件 | 白色薄片垫片和镊子分别置于各自完整透明无菌包装内 | draft_v0.5.2 | P3 |
 | `small_static_parts` | 静态小件组 | 小零件 | 静态垫片、培养皿/盖、蓝色无菌垫、金属零件、卡箍、扳手 | final_draft_v0.5 | P3 |
 | `static_pad_disc` | 静态白色垫片 | 小零件 | v0.5 因出现在左侧卡箍前方而删除/隐藏 | removed_or_hidden_v0.5 | P3 |
 | `static_dish` | 静态培养皿 | 小零件 | 右后打孔区静态培养皿/浅圆盘，含淡黄色内容物 | final_draft_v0.5 | P3 |

@@ -10,6 +10,138 @@ function setId(object, id) {
   });
 }
 
+function setTransparentPackageId(object, id) {
+  object.userData.id = id;
+  object.traverse?.((child) => {
+    child.userData.id = id;
+    child.castShadow = false;
+    child.receiveShadow = true;
+  });
+}
+
+function createRoundedRectShape(width, depth, radius) {
+  const x = width / 2;
+  const z = depth / 2;
+  const r = Math.min(radius, x, z);
+  const shape = new THREE.Shape();
+
+  shape.moveTo(-x + r, -z);
+  shape.lineTo(x - r, -z);
+  shape.quadraticCurveTo(x, -z, x, -z + r);
+  shape.lineTo(x, z - r);
+  shape.quadraticCurveTo(x, z, x - r, z);
+  shape.lineTo(-x + r, z);
+  shape.quadraticCurveTo(-x, z, -x, z - r);
+  shape.lineTo(-x, -z + r);
+  shape.quadraticCurveTo(-x, -z, -x + r, -z);
+  return shape;
+}
+
+function createRoundedRectPath(width, depth, radius) {
+  const x = width / 2;
+  const z = depth / 2;
+  const r = Math.min(radius, x, z);
+  const path = new THREE.Path();
+
+  path.moveTo(-x + r, -z);
+  path.quadraticCurveTo(-x, -z, -x, -z + r);
+  path.lineTo(-x, z - r);
+  path.quadraticCurveTo(-x, z, -x + r, z);
+  path.lineTo(x - r, z);
+  path.quadraticCurveTo(x, z, x, z - r);
+  path.lineTo(x, -z + r);
+  path.quadraticCurveTo(x, -z, x - r, -z);
+  path.lineTo(-x + r, -z);
+  return path;
+}
+
+function createRoundedRectSideShell(width, depth, height, radius, thickness) {
+  const outer = createRoundedRectShape(width, depth, radius);
+  outer.holes.push(
+    createRoundedRectPath(
+      width - thickness * 2,
+      depth - thickness * 2,
+      Math.max(0.02, radius - thickness)
+    )
+  );
+
+  const geometry = new THREE.ExtrudeGeometry(outer, {
+    depth: height,
+    bevelEnabled: false,
+    curveSegments: 20
+  });
+  geometry.computeVertexNormals();
+  return geometry;
+}
+
+function createFlatWasherGeometry(innerRadius, outerRadius, thickness) {
+  const shape = new THREE.Shape();
+  shape.absarc(0, 0, outerRadius, 0, Math.PI * 2, false);
+
+  const hole = new THREE.Path();
+  hole.absarc(0, 0, innerRadius, 0, Math.PI * 2, true);
+  shape.holes.push(hole);
+
+  const geometry = new THREE.ExtrudeGeometry(shape, {
+    depth: thickness,
+    bevelEnabled: false,
+    curveSegments: 96
+  });
+  geometry.center();
+  return geometry;
+}
+
+function createSoftSterilePackage(dims, materials) {
+  const bag = new THREE.Group();
+  const shape = createRoundedRectShape(dims.w, dims.d, dims.r ?? 0.12);
+
+  const bottom = new THREE.Mesh(new THREE.ShapeGeometry(shape), materials.sterileBag);
+  bottom.name = "floating_sterile_package_bottom_film";
+  bottom.rotation.x = -Math.PI / 2;
+  bottom.position.y = -0.018;
+  bag.add(bottom);
+
+  const topGeometry = new THREE.ShapeGeometry(shape, 4);
+  const positions = topGeometry.attributes.position;
+  for (let i = 0; i < positions.count; i += 1) {
+    const x = positions.getX(i) / (dims.w / 2);
+    const z = positions.getY(i) / (dims.d / 2);
+    const dome = Math.max(0, 1 - 0.32 * (x * x + z * z));
+    positions.setZ(i, (dims.h ?? 0.22) * dome);
+  }
+  topGeometry.computeVertexNormals();
+
+  const top = new THREE.Mesh(topGeometry, materials.sterileBag);
+  top.name = "floating_sterile_package_top_soft_film";
+  top.rotation.x = -Math.PI / 2;
+  top.position.y = 0.022;
+  bag.add(top);
+
+  const sideHeight = (dims.h ?? 0.22) * 0.72 + 0.055;
+  const sideThickness = dims.sideThickness ?? 0.038;
+  const sideShell = new THREE.Mesh(
+    createRoundedRectSideShell(dims.w, dims.d, sideHeight, dims.r ?? 0.12, sideThickness),
+    materials.sterileBag
+  );
+  sideShell.name = "floating_sterile_package_continuous_side_wall";
+  sideShell.rotation.x = -Math.PI / 2;
+  sideShell.position.y = -0.018;
+  bag.add(sideShell);
+
+  if (dims.crease !== false) {
+    const crease = new THREE.Mesh(
+      new THREE.PlaneGeometry(dims.w * 0.72, 0.018),
+      materials.sterileBagSeal
+    );
+    crease.name = "floating_sterile_package_soft_crease";
+    crease.rotation.set(-Math.PI / 2, 0, dims.creaseRot ?? -0.12);
+    crease.position.set(0, (dims.h ?? 0.22) + 0.018, 0);
+    bag.add(crease);
+  }
+
+  return bag;
+}
+
 function createFunnel(id, x, materials) {
   const group = new THREE.Group();
   group.name = id;
@@ -267,26 +399,63 @@ export function createDynamicProductionFlow(materials) {
   hose.name = "middle_funnel_transparent_soft_hose";
   group.add(hose);
 
-  [0, 1].forEach((pointIndex) => {
-    const point = pointIndex === 0
-      ? hosePath.getPoint(0)
-      : new THREE.Vector3(
-          SCENE_SCALE.centerEquipmentX,
-          SCENE_SCALE.centerVesselY + 0.64,
-          SCENE_SCALE.centerEquipmentZ
-        );
-    const ringMaterial = pointIndex === 0
-      ? new THREE.MeshStandardMaterial({
-          color: 0xf1f3f4,
-          metalness: 1,
-          roughness: 0.1
-        })
-      : materials.polishedSteel;
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.69, 0.032, 12, 72), ringMaterial);
-    ring.name = pointIndex === 0 ? "soft_hose_upper_clamp_ring" : "soft_hose_bucket_clamp_ring";
+  const clampMaterial = new THREE.MeshStandardMaterial({
+    color: 0xd8dde0,
+    metalness: 0.9,
+    roughness: 0.16
+  });
+  const upperConnectorClamp = new THREE.Mesh(new THREE.TorusGeometry(0.86, 0.038, 12, 72), clampMaterial);
+  upperConnectorClamp.name = "middle_funnel_lower_connector_clamp_ring";
+  upperConnectorClamp.rotation.x = Math.PI / 2;
+  upperConnectorClamp.position.set(
+    SCENE_SCALE.funnelDeviceXs.middle,
+    SCENE_SCALE.funnelPairY + 0.205,
+    SCENE_SCALE.centerEquipmentZ
+  );
+  group.add(upperConnectorClamp);
+
+  [0.14, Math.PI - 0.12, Math.PI * 0.42, Math.PI * 0.58, Math.PI * 1.32, Math.PI * 1.72].forEach((angle, index) => {
+    const isFrontBlock = index === 2 || index === 3;
+    const block = new THREE.Mesh(
+      new THREE.BoxGeometry(isFrontBlock ? 0.22 : 0.18, 0.14, isFrontBlock ? 0.14 : 0.1),
+      clampMaterial
+    );
+    block.name = `middle_funnel_lower_connector_clamp_block_${String(index + 1).padStart(2, "0")}`;
+    block.position.set(
+      SCENE_SCALE.funnelDeviceXs.middle + Math.cos(angle) * 0.92,
+      SCENE_SCALE.funnelPairY + 0.205,
+      SCENE_SCALE.centerEquipmentZ + Math.sin(angle) * 0.92
+    );
+    block.rotation.y = -angle;
+    group.add(block);
+  });
+
+  [
+    {
+      name: "soft_hose_bucket_connection_clamp_ring",
+      point: new THREE.Vector3(
+        SCENE_SCALE.centerEquipmentX,
+        SCENE_SCALE.centerVesselY + 0.64,
+        SCENE_SCALE.centerEquipmentZ
+      ),
+      material: materials.polishedSteel,
+      lockAngle: 0.7
+    }
+  ].forEach(({ name, point, material, lockAngle }) => {
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.71, 0.04, 12, 72), material);
+    ring.name = name;
     ring.rotation.x = Math.PI / 2;
     ring.position.copy(point);
-    group.add(ring);
+
+    const lock = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.09, 0.12), material);
+    lock.name = `${name}_lock_block`;
+    lock.position.set(
+      point.x + Math.cos(lockAngle) * 0.72,
+      point.y,
+      point.z + Math.sin(lockAngle) * 0.72
+    );
+    lock.rotation.y = -lockAngle;
+    group.add(ring, lock);
   });
 
   const flowParticles = [];
@@ -328,17 +497,23 @@ export function createFloatingTweezerGasket(materials) {
   group.name = "floating_tweezer_gasket";
   group.userData.id = "floating_tweezer_gasket";
 
-  const baseX = 2.02;
   const baseY = SCENE_SCALE.tableHeight + 1.34;
-  const baseZ = 0.58;
+  const gasketX = 1.86;
+  const gasketZ = 0.52;
+  const tweezerX = 3.38;
+  const tweezerZ = 0.92;
+
+  const flatGasketMaterial = materials.whitePlastic.clone();
+  flatGasketMaterial.name = "floating_flat_white_gasket_material";
+  flatGasketMaterial.side = THREE.DoubleSide;
 
   const gasket = new THREE.Mesh(
-    new THREE.TorusGeometry(0.42, 0.026, 14, 72),
-    materials.whitePlastic
+    createFlatWasherGeometry(0.35, 0.47, 0.012),
+    flatGasketMaterial
   );
-  gasket.name = "floating_white_round_gasket";
+  gasket.name = "floating_white_flat_washer_gasket";
   gasket.rotation.set(Math.PI / 2, 0.12, -0.2);
-  gasket.position.set(baseX, baseY, baseZ);
+  gasket.position.set(gasketX, baseY, gasketZ);
   group.add(gasket);
 
   [
@@ -350,12 +525,32 @@ export function createFloatingTweezerGasket(materials) {
       materials.polishedSteel
     );
     arm.name = name;
-    arm.position.set(baseX + 0.78, baseY + offset, baseZ + 0.18);
+    arm.position.set(tweezerX, baseY + offset, tweezerZ);
     arm.rotation.set(0.04, 0.42, 0.08 - offset * 1.0);
     group.add(arm);
   });
 
+  const gasketPackage = createSoftSterilePackage(
+    { w: 1.18, h: 0.2, d: 1.16, r: 0.14, crease: false },
+    materials
+  );
+  gasketPackage.name = "floating_gasket_sterile_bag";
+  gasketPackage.position.set(gasketX, baseY - 0.045, gasketZ);
+  gasketPackage.rotation.set(0, -0.2, 0);
+  group.add(gasketPackage);
+
+  const tweezerPackage = createSoftSterilePackage(
+    { w: 1.34, h: 0.26, d: 0.5, r: 0.1, crease: false },
+    materials
+  );
+  tweezerPackage.name = "floating_tweezer_sterile_bag";
+  tweezerPackage.position.set(tweezerX, baseY - 0.12, tweezerZ);
+  tweezerPackage.rotation.set(0, 0.42, 0);
+  group.add(tweezerPackage);
+
   setId(group, "floating_tweezer_gasket");
+  setTransparentPackageId(gasketPackage, "floating_gasket_sterile_bag");
+  setTransparentPackageId(tweezerPackage, "floating_tweezer_sterile_bag");
   return group;
 }
 
