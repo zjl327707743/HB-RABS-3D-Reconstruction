@@ -102,7 +102,7 @@ canvas {
 
 .page-nav-buttons {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
   gap: 7px;
 }
 
@@ -158,6 +158,15 @@ button.active {
 
 .toggle-list input {
   margin: 0;
+}
+
+.action-button-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #d7dde6;
 }
 
 .display-mode-control {
