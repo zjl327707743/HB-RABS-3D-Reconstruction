@@ -3,11 +3,14 @@ export function createCameraControls({
   onPreset,
   onToggle,
   onDisplayMode,
+  onAction,
   initialVisibility,
   initialDisplayMode = "dynamic",
   versionTitle = "HB-RABS v0.2",
   currentPage = "dynamic",
   pageLinks = [],
+  visibilityToggles,
+  actionButtons = [],
   displayModes = [
     ["static", "静态结构"],
     ["dynamic", "动态演示"]
@@ -72,7 +75,7 @@ export function createCameraControls({
 
   const visibility = document.createElement("div");
   visibility.className = "toggle-list";
-  const toggles = [
+  const toggles = visibilityToggles ?? [
     ["chamber_shell", "舱体外框"],
     ["glass_panels", "玻璃面板"],
     ["workbench", "工作台"],
@@ -89,6 +92,20 @@ export function createCameraControls({
     visibility.appendChild(row);
   });
   body.appendChild(visibility);
+
+  if (actionButtons.length > 0) {
+    const actionGroup = document.createElement("div");
+    actionGroup.className = "action-button-grid";
+    actionButtons.forEach(([id, label]) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.dataset.action = id;
+      button.textContent = label;
+      button.addEventListener("click", () => onAction?.(id, button));
+      actionGroup.appendChild(button);
+    });
+    body.appendChild(actionGroup);
+  }
 
   if (displayModes.length > 0) {
     const displayModeGroup = document.createElement("div");

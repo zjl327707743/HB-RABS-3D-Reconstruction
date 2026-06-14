@@ -12,6 +12,7 @@ export default defineConfig({
       input: {
         main: resolve(rootDir, 'index.html'),
         tableItems: resolve(rootDir, 'table-items/index.html'),
+        newModel: resolve(rootDir, 'new-model/index.html'),
       },
     },
   },

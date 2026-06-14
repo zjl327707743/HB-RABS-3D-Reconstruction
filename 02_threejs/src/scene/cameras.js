@@ -51,6 +51,59 @@ export const TABLE_ITEMS_CAMERA_PRESETS = {
   }
 };
 
+export const NEW_MODEL_CAMERA_PRESETS = {
+  camera_front_overall: {
+    label: "camera_front_overall",
+    position: new THREE.Vector3(0, 2.6, 9.7),
+    target: new THREE.Vector3(0, 1.35, -0.15)
+  },
+  camera_left_front: {
+    label: "camera_left_front",
+    position: new THREE.Vector3(-5.8, 2.85, 6.5),
+    target: new THREE.Vector3(-0.15, 1.22, -0.25)
+  },
+  camera_right_front: {
+    label: "camera_right_front",
+    position: new THREE.Vector3(5.7, 2.85, 6.2),
+    target: new THREE.Vector3(0.18, 1.24, -0.25)
+  },
+  camera_center_hard_pipe_side_reference: {
+    label: "camera_center_hard_pipe_side_reference",
+    position: new THREE.Vector3(5.35, 2.35, -1.0),
+    target: new THREE.Vector3(0, 1.5, -1.08)
+  },
+  camera_center_hard_pipe_front_closeup: {
+    label: "camera_center_hard_pipe_front_closeup",
+    position: new THREE.Vector3(0.7, 2.05, 3.05),
+    target: new THREE.Vector3(0, 1.34, -0.66)
+  },
+  camera_left_suction_cup_closeup: {
+    label: "camera_left_suction_cup_closeup",
+    position: new THREE.Vector3(-4.7, 2.25, 3.0),
+    target: new THREE.Vector3(-2.16, 1.7, -0.68)
+  },
+  camera_drum_and_full_track: {
+    label: "camera_drum_and_full_track",
+    position: new THREE.Vector3(0, 3.05, 7.35),
+    target: new THREE.Vector3(0, 0.35, 0.12)
+  },
+  camera_right_hose_wall_to_drum: {
+    label: "camera_right_hose_wall_to_drum",
+    position: new THREE.Vector3(3.65, 2.25, 3.4),
+    target: new THREE.Vector3(0.92, 1.36, -0.5)
+  },
+  camera_worktable_top_oblique: {
+    label: "camera_worktable_top_oblique",
+    position: new THREE.Vector3(1.0, 7.25, 4.75),
+    target: new THREE.Vector3(0, 0.3, 0)
+  },
+  camera_centerline_alignment: {
+    label: "camera_centerline_alignment",
+    position: new THREE.Vector3(0, 6.2, 0.08),
+    target: new THREE.Vector3(0, 0.4, 0.04)
+  }
+};
+
 export function createCamera(aspect) {
   const camera = new THREE.PerspectiveCamera(42, aspect, 0.1, 120);
   const preset = CAMERA_PRESETS.camera_overall_front;
