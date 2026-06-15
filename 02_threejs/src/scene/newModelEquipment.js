@@ -18,6 +18,26 @@ const CENTER_FLANGE_METAL_ELBOW_BASE_Z = CENTER_FLANGE_Z;
 const CENTER_FLANGE_METAL_ELBOW_END_X = 0.56;
 const CENTER_FLANGE_METAL_ELBOW_END_Y = CENTER_FLANGE_Y + 0.29;
 const CENTER_FLANGE_METAL_ELBOW_END_Z = CENTER_FLANGE_Z + 0.03;
+const DRUM_START_X = -3.75;
+const SUCTION_X = -2.45;
+const LIFT_TABLE_LOW_Y = 0.02;
+const LIFT_TABLE_CONTACT_Y = 0.16;
+const LIFT_TABLE_RAISED_Y = 0.475;
+
+export const NEW_MODEL_DEMO_LAYOUT = {
+  drumStartX: DRUM_START_X,
+  suctionX: SUCTION_X,
+  centerX: DRUM_X,
+  drumZ: DRUM_Z,
+  drumBaseY: DRUM_BASE_Y,
+  drumTopY: DRUM_TOP_Y,
+  coverY: DRUM_TOP_Y + 0.028,
+  liftTableLowY: LIFT_TABLE_LOW_Y,
+  liftTableContactY: LIFT_TABLE_CONTACT_Y,
+  liftTableRaisedY: LIFT_TABLE_RAISED_Y,
+  drumLiftY: LIFT_TABLE_RAISED_Y - LIFT_TABLE_CONTACT_Y,
+  suctionDownY: 0.292
+};
 
 function mark(object, id) {
   object.userData.id = id;
@@ -192,6 +212,50 @@ export function createHollowMetalDrum(materials) {
   return group;
 }
 
+export function createDrumTransportPlatform(materials) {
+  const group = new THREE.Group();
+  group.name = "new_model_drum_transport_platform";
+  group.userData.id = "new_model_drum";
+
+  const baseY = DRUM_BASE_Y - 0.045;
+  group.add(
+    box("new_model_transport_platform_flat_carriage", [1.36, 0.08, 1.16], [0, baseY, DRUM_Z], materials.equipmentDarkSteel, "new_model_drum"),
+    box("new_model_transport_platform_front_edge", [1.2, 0.075, 0.08], [0, baseY + 0.075, DRUM_Z + 0.62], materials.brushedDark, "new_model_drum"),
+    box("new_model_transport_platform_rear_edge", [1.2, 0.075, 0.08], [0, baseY + 0.075, DRUM_Z - 0.62], materials.brushedDark, "new_model_drum")
+  );
+
+  return group;
+}
+
+export function createDrumCoverPlate(materials) {
+  const group = new THREE.Group();
+  group.name = "new_model_drum_cover_plate";
+  group.userData.id = "new_model_drum";
+
+  const coverY = DRUM_TOP_Y + 0.028;
+  group.add(
+    cylinderY("new_model_drum_round_metal_cover_disk", 0.52, 0.52, 0.048, [0, coverY, DRUM_Z], materials.polishedSteel, "new_model_drum", 96),
+    torus("new_model_drum_cover_soft_outer_bead", 0.52, 0.018, [0, coverY + 0.03, DRUM_Z], materials.equipmentDarkSteel, "new_model_drum")
+  );
+
+  return group;
+}
+
+export function createCenterLiftTable(materials) {
+  const group = new THREE.Group();
+  group.name = "new_model_center_lift_table";
+  group.userData.id = "new_model_center_lift_table";
+  group.position.y = LIFT_TABLE_LOW_Y;
+
+  group.add(
+    cylinderY("new_model_center_lift_table_round_top", 0.46, 0.46, 0.08, [0, 0, DRUM_Z], materials.equipmentDarkSteel, "new_model_center_lift_table", 72),
+    cylinderY("new_model_center_lift_table_telescoping_post", 0.15, 0.18, 0.34, [0, -0.21, DRUM_Z], materials.polishedSteel, "new_model_center_lift_table", 48),
+    cylinderY("new_model_center_lift_table_lower_socket", 0.28, 0.28, 0.08, [0, -0.41, DRUM_Z], materials.brushedDark, "new_model_center_lift_table", 56)
+  );
+
+  return group;
+}
+
 export function createCenterHardPipeAssembly(materials) {
   const group = new THREE.Group();
   group.name = "centerHardPipeGroup";
@@ -346,15 +410,21 @@ export function createLeftSuctionCupAssembly(materials) {
 
   const id = "new_model_left_suction_cup";
   const beamY = 3.05;
-  const beamZ = -0.78;
+  const beamZ = DRUM_Z;
   const cupX = -2.45;
   const cupCenterY = 1.66;
+  const motionHead = new THREE.Group();
+  motionHead.name = "new_model_suction_cup_motion_head";
+  motionHead.userData.id = id;
 
   group.add(
     cylinderX("new_model_suction_cup_high_short_support_beam", 0.07, 1.28, [cupX, beamY, beamZ], materials.equipmentDarkSteel, id, 32),
     cylinderY("new_model_suction_cup_vertical_hanger", 0.045, 0.045, 1.24, [cupX, 2.41, beamZ], materials.equipmentDarkSteel, id, 24),
-    cylinderY("new_model_suction_cup_upper_short_connector", 0.065, 0.055, 0.18, [cupX, 1.72, beamZ], materials.equipmentDarkSteel, id, 32),
     torus("new_model_suction_cup_beam_hanger_clamp", 0.085, 0.014, [cupX, beamY, beamZ], materials.equipmentSteel, id)
+  );
+  motionHead.add(
+    cylinderY("new_model_suction_cup_upper_short_connector", 0.065, 0.055, 0.18, [cupX, 1.72, beamZ], materials.equipmentDarkSteel, id, 32),
+    cylinderY("new_model_suction_cup_sliding_lower_stem", 0.04, 0.045, 0.34, [cupX, 1.93, beamZ], materials.polishedSteel, id, 24)
   );
 
   const cupProfile = [
@@ -381,7 +451,15 @@ export function createLeftSuctionCupAssembly(materials) {
   underside.name = "new_model_suction_cup_dark_recess_under_lip";
   underside.rotation.x = -Math.PI / 2;
   underside.position.set(cupX, cupCenterY - 0.155, beamZ);
-  group.add(cup, lip, mark(underside, id));
+  motionHead.add(cup, lip, mark(underside, id));
+  group.add(motionHead);
+
+  group.userData.animation = {
+    motionHead,
+    cupX,
+    cupZ: beamZ,
+    undersideY: cupCenterY - 0.155
+  };
 
   return group;
 }
@@ -438,10 +516,22 @@ export function createRightVacuumHoseAssembly(materials) {
 }
 
 export function createNewModelObjects(materials) {
+  const drum = createHollowMetalDrum(materials);
+  const platform = createDrumTransportPlatform(materials);
+  const cover = createDrumCoverPlate(materials);
+  const liftTable = createCenterLiftTable(materials);
+
+  drum.position.x = DRUM_START_X;
+  platform.position.x = DRUM_START_X;
+  cover.position.x = DRUM_START_X;
+
   return {
     new_model_work_area: createFullLengthTransportTrack(materials),
-    new_model_drum: createHollowMetalDrum(materials),
+    new_model_drum: drum,
+    new_model_transport_platform: platform,
+    new_model_drum_cover_plate: cover,
     new_model_center_elbow: createCenterHardPipeAssembly(materials),
+    new_model_center_lift_table: liftTable,
     new_model_left_suction_cup: createLeftSuctionCupAssembly(materials),
     new_model_right_white_pipe: createRightVacuumHoseAssembly(materials)
   };

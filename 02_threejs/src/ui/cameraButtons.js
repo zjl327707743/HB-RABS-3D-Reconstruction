@@ -11,6 +11,8 @@ export function createCameraControls({
   pageLinks = [],
   visibilityToggles,
   actionButtons = [],
+  demoActionButtons = [],
+  demoDisplayMode,
   displayModes = [
     ["static", "静态结构"],
     ["dynamic", "动态演示"]
@@ -67,31 +69,11 @@ export function createCameraControls({
     const button = document.createElement("button");
     button.type = "button";
     button.dataset.camera = key;
-    button.textContent = key.replace("camera_", "");
+    button.textContent = presets[key].label ?? key.replace("camera_", "");
     button.addEventListener("click", () => onPreset(key));
     cameraGroup.appendChild(button);
   });
   body.appendChild(cameraGroup);
-
-  const visibility = document.createElement("div");
-  visibility.className = "toggle-list";
-  const toggles = visibilityToggles ?? [
-    ["chamber_shell", "舱体外框"],
-    ["glass_panels", "玻璃面板"],
-    ["workbench", "工作台"],
-    ["glove_ports", "手套孔"]
-  ];
-  toggles.forEach(([id, label]) => {
-    const row = document.createElement("label");
-    const input = document.createElement("input");
-    input.type = "checkbox";
-    input.checked = initialVisibility[id] !== false;
-    input.addEventListener("change", () => onToggle(id, input.checked));
-    row.appendChild(input);
-    row.append(label);
-    visibility.appendChild(row);
-  });
-  body.appendChild(visibility);
 
   if (actionButtons.length > 0) {
     const actionGroup = document.createElement("div");
@@ -105,6 +87,13 @@ export function createCameraControls({
       actionGroup.appendChild(button);
     });
     body.appendChild(actionGroup);
+  }
+
+  let demoActionGroup;
+  function setDemoControlsVisible(visible) {
+    if (demoActionGroup) {
+      demoActionGroup.hidden = !visible;
+    }
   }
 
   if (displayModes.length > 0) {
@@ -129,6 +118,7 @@ export function createCameraControls({
         displayModeButtons.querySelectorAll("[data-display-mode]").forEach((candidate) => {
           candidate.classList.toggle("active", candidate.dataset.displayMode === mode);
         });
+        setDemoControlsVisible(mode === demoDisplayMode);
       });
       displayModeButtons.appendChild(button);
     });
@@ -136,6 +126,41 @@ export function createCameraControls({
     displayModeGroup.appendChild(displayModeButtons);
     body.appendChild(displayModeGroup);
   }
+
+  if (demoActionButtons.length > 0) {
+    demoActionGroup = document.createElement("div");
+    demoActionGroup.className = "dynamic-demo-control";
+    demoActionGroup.hidden = initialDisplayMode !== demoDisplayMode;
+    demoActionButtons.forEach(([id, label]) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.dataset.demoAction = id;
+      button.textContent = label;
+      button.addEventListener("click", () => onAction?.(id, button));
+      demoActionGroup.appendChild(button);
+    });
+    body.appendChild(demoActionGroup);
+  }
+
+  const visibility = document.createElement("div");
+  visibility.className = "toggle-list";
+  const toggles = visibilityToggles ?? [
+    ["chamber_shell", "舱体外框"],
+    ["glass_panels", "玻璃面板"],
+    ["workbench", "工作台"],
+    ["glove_ports", "手套孔"]
+  ];
+  toggles.forEach(([id, label]) => {
+    const row = document.createElement("label");
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.checked = initialVisibility[id] !== false;
+    input.addEventListener("change", () => onToggle(id, input.checked));
+    row.appendChild(input);
+    row.append(label);
+    visibility.appendChild(row);
+  });
+  body.appendChild(visibility);
 
   const currentCamera = document.createElement("div");
   currentCamera.className = "current-camera";
@@ -175,9 +200,20 @@ export function createCameraControls({
   document.body.appendChild(panel);
   return {
     setCurrentCamera(name) {
-      currentCamera.textContent = `Current: ${name}`;
+      currentCamera.textContent = `Current: ${presets[name]?.label ?? name}`;
       panel.querySelectorAll("[data-camera]").forEach((button) => {
         button.classList.toggle("active", button.dataset.camera === name);
+      });
+    },
+    setActionActive(id, active) {
+      panel.querySelectorAll(`[data-action="${id}"]`).forEach((button) => {
+        button.classList.toggle("active", active);
+      });
+    },
+    setDemoControlsVisible,
+    setDemoButtonLabel(id, label) {
+      panel.querySelectorAll(`[data-demo-action="${id}"]`).forEach((button) => {
+        button.textContent = label;
       });
     }
   };

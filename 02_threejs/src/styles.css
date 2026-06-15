@@ -189,6 +189,17 @@ button.active {
   gap: 7px;
 }
 
+.dynamic-demo-control {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 8px;
+}
+
+.dynamic-demo-control[hidden] {
+  display: none;
+}
+
 .current-camera {
   margin-top: 10px;
   padding-top: 9px;

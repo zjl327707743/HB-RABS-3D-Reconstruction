@@ -399,6 +399,31 @@ export function createDynamicProductionFlow(materials) {
   hose.name = "middle_funnel_transparent_soft_hose";
   group.add(hose);
 
+  const hosePackage = createSoftSterilePackage(
+    { w: 1.92, h: 0.28, d: 0.98, r: 0.13, creaseRot: 0.1 },
+    materials
+  );
+  hosePackage.name = "removed_soft_hose_sterile_material_bag";
+  hosePackage.position.set(-3.5, SCENE_SCALE.tableHeight + 0.13, -0.42);
+  hosePackage.rotation.set(0, 0.08, 0);
+  hosePackage.visible = false;
+  group.add(hosePackage);
+
+  const bagHosePath = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-4.14, SCENE_SCALE.tableHeight + 0.24, -0.54),
+    new THREE.Vector3(-3.86, SCENE_SCALE.tableHeight + 0.27, -0.68),
+    new THREE.Vector3(-3.46, SCENE_SCALE.tableHeight + 0.28, -0.62),
+    new THREE.Vector3(-3.08, SCENE_SCALE.tableHeight + 0.25, -0.44),
+    new THREE.Vector3(-2.88, SCENE_SCALE.tableHeight + 0.23, -0.26)
+  ], false, "centripetal", 0.35);
+  const baggedHose = new THREE.Mesh(
+    new THREE.TubeGeometry(bagHosePath, 80, 0.12, 22, false),
+    materials.transparentSoftHose
+  );
+  baggedHose.name = "removed_soft_hose_folded_inside_sterile_bag";
+  baggedHose.visible = false;
+  group.add(baggedHose);
+
   const clampMaterial = new THREE.MeshStandardMaterial({
     color: 0xd8dde0,
     metalness: 0.9,
@@ -484,10 +509,14 @@ export function createDynamicProductionFlow(materials) {
   const offsets = flowParticles.map(() => Math.random());
   group.userData.animation = {
     hosePath,
+    hose,
+    hosePackage,
+    baggedHose,
     flowParticles,
     liquidSurface,
     flowOffsets: offsets
   };
+  setTransparentPackageId(hosePackage, "removed_soft_hose_sterile_material_bag");
 
   return group;
 }
@@ -508,7 +537,7 @@ export function createFloatingTweezerGasket(materials) {
   flatGasketMaterial.side = THREE.DoubleSide;
 
   const gasket = new THREE.Mesh(
-    createFlatWasherGeometry(0.35, 0.47, 0.012),
+    createFlatWasherGeometry(0.67, 0.87, 0.014),
     flatGasketMaterial
   );
   gasket.name = "floating_white_flat_washer_gasket";
@@ -516,6 +545,7 @@ export function createFloatingTweezerGasket(materials) {
   gasket.position.set(gasketX, baseY, gasketZ);
   group.add(gasket);
 
+  const tweezerArms = [];
   [
     ["floating_tweezer_upper_arm", 0.055],
     ["floating_tweezer_lower_arm", -0.055]
@@ -528,6 +558,12 @@ export function createFloatingTweezerGasket(materials) {
     arm.position.set(tweezerX, baseY + offset, tweezerZ);
     arm.rotation.set(0.04, 0.42, 0.08 - offset * 1.0);
     group.add(arm);
+    tweezerArms.push({
+      mesh: arm,
+      offset,
+      startPosition: arm.position.clone(),
+      startRotation: arm.rotation.clone()
+    });
   });
 
   const gasketPackage = createSoftSterilePackage(
@@ -551,6 +587,14 @@ export function createFloatingTweezerGasket(materials) {
   setId(group, "floating_tweezer_gasket");
   setTransparentPackageId(gasketPackage, "floating_gasket_sterile_bag");
   setTransparentPackageId(tweezerPackage, "floating_tweezer_sterile_bag");
+  group.userData.animation = {
+    gasket,
+    gasketStartPosition: gasket.position.clone(),
+    gasketStartRotation: gasket.rotation.clone(),
+    gasketPackage,
+    tweezerPackage,
+    tweezerArms
+  };
   return group;
 }
 
