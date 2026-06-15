@@ -9,9 +9,15 @@ const DRUM_X = 0;
 const DRUM_Z = 0.18;
 const DRUM_BASE_Y = SCENE_SCALE.tableHeight + 0.2;
 const DRUM_TOP_Y = DRUM_BASE_Y + DRUM_HEIGHT;
-const DRUM_HOSE_PORT_X = DRUM_X + DRUM_RADIUS * 0.68;
-const DRUM_HOSE_PORT_Y = DRUM_TOP_Y + 0.06;
-const DRUM_HOSE_PORT_Z = DRUM_Z + 0.02;
+const CENTER_FLANGE_Y = 1.56;
+const CENTER_FLANGE_Z = DRUM_Z;
+const CENTER_FLANGE_RADIUS = DRUM_RADIUS;
+const CENTER_FLANGE_METAL_ELBOW_BASE_X = 0.28;
+const CENTER_FLANGE_METAL_ELBOW_BASE_Y = CENTER_FLANGE_Y + 0.1;
+const CENTER_FLANGE_METAL_ELBOW_BASE_Z = CENTER_FLANGE_Z;
+const CENTER_FLANGE_METAL_ELBOW_END_X = 0.56;
+const CENTER_FLANGE_METAL_ELBOW_END_Y = CENTER_FLANGE_Y + 0.29;
+const CENTER_FLANGE_METAL_ELBOW_END_Z = CENTER_FLANGE_Z + 0.03;
 
 function mark(object, id) {
   object.userData.id = id;
@@ -183,27 +189,6 @@ export function createHollowMetalDrum(materials) {
   opening.position.set(x, baseY + height - 0.035, z);
   group.add(mark(opening, "new_model_drum"));
 
-  group.add(
-    cylinderY(
-      "new_model_drum_single_top_hose_socket",
-      0.12,
-      0.12,
-      0.12,
-      [DRUM_HOSE_PORT_X, DRUM_HOSE_PORT_Y, DRUM_HOSE_PORT_Z],
-      materials.equipmentSteel,
-      "new_model_drum",
-      40
-    ),
-    torus(
-      "new_model_drum_single_top_hose_socket_rim",
-      0.125,
-      0.018,
-      [DRUM_HOSE_PORT_X, DRUM_HOSE_PORT_Y + 0.065, DRUM_HOSE_PORT_Z],
-      materials.equipmentDarkSteel,
-      "new_model_drum"
-    )
-  );
-
   return group;
 }
 
@@ -266,6 +251,38 @@ export function createCenterHardPipeAssembly(materials) {
 
   group.add(
     cylinderY(
+      "new_model_center_hard_pipe_lower_shell_clamp_band",
+      0.305,
+      0.305,
+      0.055,
+      [x, 2.05, turnZ],
+      materials.equipmentDarkSteel,
+      id,
+      48
+    ),
+    torus(
+      "new_model_center_hard_pipe_lower_shell_clamp_raised_edge",
+      0.305,
+      0.014,
+      [x, 2.08, turnZ],
+      materials.polishedSteel,
+      id
+    ),
+    box(
+      "new_model_center_hard_pipe_clamp_front_left_buckle",
+      [0.11, 0.075, 0.04],
+      [-0.09, 2.055, turnZ + 0.31],
+      materials.polishedSteel,
+      id
+    ),
+    box(
+      "new_model_center_hard_pipe_clamp_front_right_buckle",
+      [0.11, 0.075, 0.04],
+      [0.09, 2.055, turnZ + 0.31],
+      materials.polishedSteel,
+      id
+    ),
+    cylinderY(
       "new_model_center_hard_pipe_front_lower_vertical_cylinder",
       0.22,
       0.22,
@@ -277,12 +294,45 @@ export function createCenterHardPipeAssembly(materials) {
     createFlange(
       "new_model_center_hard_pipe_large_horizontal_flange",
       x,
-      1.56,
+      CENTER_FLANGE_Y,
       turnZ,
-      0.46,
+      CENTER_FLANGE_RADIUS,
       0.12,
       materials.equipmentDarkSteel,
       id
+    )
+  );
+
+  group.add(
+    cylinderY(
+      "new_model_center_hard_pipe_flange_face_metal_elbow_root",
+      0.095,
+      0.105,
+      0.14,
+      [CENTER_FLANGE_METAL_ELBOW_BASE_X, CENTER_FLANGE_METAL_ELBOW_BASE_Y - 0.01, CENTER_FLANGE_METAL_ELBOW_BASE_Z],
+      materials.polishedSteel,
+      id,
+      36
+    ),
+    torus(
+      "new_model_center_hard_pipe_flange_face_metal_elbow_root_rim",
+      0.108,
+      0.016,
+      [CENTER_FLANGE_METAL_ELBOW_BASE_X, CENTER_FLANGE_METAL_ELBOW_BASE_Y + 0.07, CENTER_FLANGE_METAL_ELBOW_BASE_Z],
+      materials.polishedSteel,
+      id
+    ),
+    cubicTube(
+      "new_model_center_hard_pipe_flange_face_curved_metal_elbow",
+      new THREE.Vector3(CENTER_FLANGE_METAL_ELBOW_BASE_X, CENTER_FLANGE_METAL_ELBOW_BASE_Y + 0.06, CENTER_FLANGE_METAL_ELBOW_BASE_Z),
+      new THREE.Vector3(0.32, CENTER_FLANGE_Y + 0.18, CENTER_FLANGE_Z + 0.01),
+      new THREE.Vector3(0.46, CENTER_FLANGE_Y + 0.27, CENTER_FLANGE_Z + 0.03),
+      new THREE.Vector3(CENTER_FLANGE_METAL_ELBOW_END_X, CENTER_FLANGE_METAL_ELBOW_END_Y, CENTER_FLANGE_METAL_ELBOW_END_Z),
+      0.07,
+      materials.polishedSteel,
+      id,
+      56,
+      18
     )
   );
 
@@ -342,8 +392,8 @@ export function createRightVacuumHoseAssembly(materials) {
   group.userData.id = "new_model_right_white_pipe";
 
   const id = "new_model_right_white_pipe";
-  const wallX = 1.62;
-  const wallY = 2.08;
+  const wallX = 1.9;
+  const wallY = 2.58;
 
   group.add(createRearWallPort({
     name: "new_model_right_vacuum_hose_rear_wall_port",
@@ -355,14 +405,14 @@ export function createRightVacuumHoseAssembly(materials) {
   }));
 
   group.add(tube(
-    "new_model_right_vacuum_hose_white_wall_to_drum_path",
+    "new_model_right_vacuum_hose_white_wall_to_center_flange_path",
     [
       new THREE.Vector3(wallX, wallY, REAR_Z + 0.16),
-      new THREE.Vector3(1.62, 2.04, -1.45),
-      new THREE.Vector3(1.38, 1.78, -0.92),
-      new THREE.Vector3(1.08, 1.48, -0.32),
-      new THREE.Vector3(0.78, 1.33, 0.04),
-      new THREE.Vector3(DRUM_HOSE_PORT_X + 0.24, DRUM_HOSE_PORT_Y + 0.08, DRUM_HOSE_PORT_Z)
+      new THREE.Vector3(1.94, 2.56, -1.36),
+      new THREE.Vector3(1.78, 2.42, -0.72),
+      new THREE.Vector3(1.35, 2.16, -0.14),
+      new THREE.Vector3(0.86, 1.96, 0.04),
+      new THREE.Vector3(CENTER_FLANGE_METAL_ELBOW_END_X - 0.01, CENTER_FLANGE_METAL_ELBOW_END_Y + 0.01, CENTER_FLANGE_METAL_ELBOW_END_Z)
     ],
     0.075,
     materials.whitePlastic,
@@ -372,42 +422,17 @@ export function createRightVacuumHoseAssembly(materials) {
   ));
 
   group.add(tube(
-    "new_model_right_vacuum_hose_clean_terminal_metal_sleeve",
+    "new_model_right_vacuum_hose_white_overlap_sleeve_over_metal_elbow",
     [
-      new THREE.Vector3(0.86, 1.34, -0.04),
-      new THREE.Vector3(0.74, 1.31, 0.04),
-      new THREE.Vector3(DRUM_HOSE_PORT_X + 0.24, DRUM_HOSE_PORT_Y + 0.08, DRUM_HOSE_PORT_Z)
+      new THREE.Vector3(CENTER_FLANGE_METAL_ELBOW_END_X + 0.02, CENTER_FLANGE_METAL_ELBOW_END_Y + 0.02, CENTER_FLANGE_METAL_ELBOW_END_Z),
+      new THREE.Vector3(CENTER_FLANGE_METAL_ELBOW_END_X - 0.04, CENTER_FLANGE_METAL_ELBOW_END_Y, CENTER_FLANGE_METAL_ELBOW_END_Z)
     ],
-    0.082,
-    materials.equipmentSteel,
+    0.083,
+    materials.whitePlastic,
     id,
-    28,
+    12,
     18
   ));
-
-  const endCoupling = tube(
-    "new_model_right_vacuum_hose_short_metal_connector_into_single_top_socket",
-    [
-      new THREE.Vector3(DRUM_HOSE_PORT_X + 0.24, DRUM_HOSE_PORT_Y + 0.08, DRUM_HOSE_PORT_Z),
-      new THREE.Vector3(DRUM_HOSE_PORT_X + 0.14, DRUM_HOSE_PORT_Y + 0.055, DRUM_HOSE_PORT_Z),
-      new THREE.Vector3(DRUM_HOSE_PORT_X + 0.045, DRUM_HOSE_PORT_Y + 0.02, DRUM_HOSE_PORT_Z)
-    ],
-    0.085,
-    materials.equipmentSteel,
-    id,
-    24,
-    18
-  );
-  const blueBand = cylinderX(
-    "new_model_right_vacuum_hose_blue_gray_terminal_band",
-    0.108,
-    0.07,
-    [DRUM_HOSE_PORT_X + 0.23, DRUM_HOSE_PORT_Y + 0.08, DRUM_HOSE_PORT_Z],
-    materials.blueSterileWrap,
-    id,
-    32
-  );
-  group.add(endCoupling, blueBand);
 
   return group;
 }
